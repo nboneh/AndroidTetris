@@ -35,16 +35,16 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         Fragment fragment = null;
         switch(v.getId()){
             case R.id.play_button:
-
+                fragment = new GameFragment();
                 break;
             case R.id.highscore_button:
                 fragment = new HighScoreFragment();
                 break;
             case R.id.help_button:
-
+                fragment = new HelpFragment();
                 break;
             case R.id.settings_button:
-
+                fragment = new SettingsFragment();
                 break;
         }
         fragmentTransaction

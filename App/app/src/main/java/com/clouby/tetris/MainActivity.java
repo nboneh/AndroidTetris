@@ -20,4 +20,10 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    protected void onPause(){
+         super.onPause();
+        Settings.getInst(this).save();
+    }
 }
