@@ -5,10 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SeekBar;
 
-/**
+/*
  * Created by nboneh on 11/15/2015.
  */
 public class SettingsFragment  extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
@@ -25,7 +24,8 @@ public class SettingsFragment  extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        ((Button)v.findViewById(R.id.back_button)).setOnClickListener(this);
+        (v.findViewById(R.id.back_button)).setOnClickListener(this);
+//        ((Button)v.findViewById(R.id.back_button)).setOnClickListener(this);
 
         SeekBar musicBar = ((SeekBar)v.findViewById((R.id.music_seekbar)));
         musicBar.setProgress((int)(musicBar.getMax() * settings.getMusicVolume()));
@@ -56,7 +56,7 @@ public class SettingsFragment  extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         switch(seekBar.getId()){
             case R.id.music_seekbar:
                 settings.setMusicVolume(progress/(float)(seekBar.getMax()));
