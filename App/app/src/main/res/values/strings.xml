@@ -2,4 +2,8 @@
     <string name="app_name">Tetris</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="themes_array">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
 </resources>

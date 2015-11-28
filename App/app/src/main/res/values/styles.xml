@@ -1,7 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar">
+    <style name="AppThemeLight" parent="@android:style/Theme.Light.NoTitleBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppThemeDark" parent="@android:style/Theme.NoTitleBar">
         <!-- Customize your theme here. -->
     </style>
 

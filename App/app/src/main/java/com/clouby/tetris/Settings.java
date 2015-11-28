@@ -8,13 +8,14 @@ public class Settings {
 
 
     private static final int HIGHSCORE_SIZE = 5;
-    private static final String WEB_URL ="http://retrospacescores.appspot.com/highscore";
     private static final String MUSIC_VOLUME_KEY = "musicVolume";
     private static final String SOUND_VOLUME_KEY = "soundVolume";
+    private static final String THEME_KEY = "theme";
 
     private HighScoreContainer[] localHighscores;
     private float musicVolume;
     private float soundVolume;
+    private int theme;
 
     private static Settings inst = null;
 
@@ -40,12 +41,14 @@ public class Settings {
     public  void load(){
         musicVolume = sharedPref.getFloat(MUSIC_VOLUME_KEY, 1);
         soundVolume = sharedPref.getFloat(SOUND_VOLUME_KEY, 1);
+        theme = sharedPref.getInt(THEME_KEY, 0);
     }
 
     public  void save(){
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putFloat(MUSIC_VOLUME_KEY, musicVolume);
         editor.putFloat(SOUND_VOLUME_KEY, soundVolume);
+        editor.putInt(THEME_KEY, theme);
         editor.commit();
     }
 
@@ -64,6 +67,14 @@ public class Settings {
 
     public float getSoundVolume(){
         return soundVolume;
+    }
+
+    public int getTheme() {
+        return theme;
+    }
+
+    public void setTheme(int theme) {
+        this.theme = theme;
     }
 
  /*   public static void loadOnlineHighScores(final Handler h){
