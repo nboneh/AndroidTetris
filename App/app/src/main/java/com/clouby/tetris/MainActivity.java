@@ -36,4 +36,11 @@ public class MainActivity extends FragmentActivity {
          super.onPause();
         Settings.getInstance(this).save();
     }
+
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        //Incase phone gained connectivity while the app was in background, send score to the web app
+        DatabaseHandler.getInstance(this).sendHighscoresToWebApp();
+    }
 }

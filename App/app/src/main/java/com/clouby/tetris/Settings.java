@@ -6,14 +6,11 @@ import android.content.SharedPreferences;
 
 public class Settings {
 
-
-    private static final int HIGHSCORE_SIZE = 5;
     private static final String MUSIC_VOLUME_KEY = "musicVolume";
     private static final String SOUND_VOLUME_KEY = "soundVolume";
     private static final String THEME_KEY = "theme";
     private static final String ALIAS_KEY = "alias";
 
-    private HighScoreContainer[] localHighscores;
     private float musicVolume;
     private float soundVolume;
     private int theme;
@@ -25,10 +22,6 @@ public class Settings {
 
     private Settings(Context context){
         sharedPref = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        localHighscores = new HighScoreContainer[HIGHSCORE_SIZE];
-        for(int i = 0; i < HIGHSCORE_SIZE; i++){
-            localHighscores[i] = new HighScoreContainer();
-        }
         load();
     }
 
