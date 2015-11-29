@@ -23,6 +23,7 @@ import android.widget.Spinner;
 public class SettingsFragment  extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, Spinner.OnItemSelectedListener {
 
     private Settings settings;
+    private Spinner themeSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class SettingsFragment  extends Fragment implements View.OnClickListener,
         soundBar.setProgress((int) (soundBar.getMax() * settings.getSoundVolume()));
         soundBar.setOnSeekBarChangeListener(this);
 
-        Spinner themeSpinner = ((Spinner)v.findViewById(R.id.theme_spinner));
+        themeSpinner = ((Spinner)v.findViewById(R.id.theme_spinner));
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
                 R.array.themes_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,7 +91,6 @@ public class SettingsFragment  extends Fragment implements View.OnClickListener,
 
     public void onItemSelected(AdapterView<?> parent,final View view,
                                final int pos, long id) {
-
         if(settings.getTheme() == pos)
             return;
 
@@ -114,13 +114,11 @@ public class SettingsFragment  extends Fragment implements View.OnClickListener,
         })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        ((Spinner)view).setSelection(settings.getTheme());
+                        themeSpinner.setSelection(settings.getTheme());
                     }
                 });
         // Create the AlertDialog object and return it
        builder.create().show();
-
-        settings.setTheme(pos);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
