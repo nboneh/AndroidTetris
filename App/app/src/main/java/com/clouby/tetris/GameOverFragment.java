@@ -29,18 +29,18 @@ public class GameOverFragment extends Fragment implements View.OnClickListener {
         ((Button) v.findViewById(R.id.highscores_button)).setOnClickListener(this);
 
         int score = getArguments().getInt("score");
-        ((TextView)v.findViewById(R.id.score_text)).append(score +"");
+        ((TextView) v.findViewById(R.id.score_text)).append(score + "");
         checkHighscores(score);
         return v;
     }
 
-    private void checkHighscores(final int score){
+    private void checkHighscores(final int score) {
         final DatabaseHandler db = DatabaseHandler.getInstance(getActivity());
         final Settings settings = Settings.getInstance(getActivity());
-        if(!db.madeLocalHighscores(score))
+        if (!db.madeLocalHighscores(score))
             return;
 
-        final EditText aliastext  = new EditText(getActivity());
+        final EditText aliastext = new EditText(getActivity());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -60,7 +60,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener {
                 .setTitle("Congratulations")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String alias =  aliastext.getText().toString();
+                        String alias = aliastext.getText().toString();
                         db.insetScore(score, aliastext.getText().toString());
                         db.sendHighscoresToWebApp();
                         settings.setAlias(alias);
@@ -81,7 +81,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
                 .beginTransaction();
         Fragment fragment = null;
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.main_menu_button:
                 return;
             case R.id.highscores_button:

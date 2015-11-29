@@ -1,7 +1,6 @@
 package com.clouby.tetris.server;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -43,11 +42,11 @@ public class HighScore extends HttpServlet {
 		List<Entity> entities =  pq.asList(FetchOptions.Builder.withLimit(numOfEntities));
 		for (Entity entity : entities) {
 			long score = (long) entity.getProperty("score");
-			String name  = (String) entity.getProperty("name");
+			String name  = (String) entity.getProperty("alias");
 		
 			try {
 				jsonEntity.put("score", score);
-				jsonEntity.put("name", name);
+				jsonEntity.put("alias", name);
 				jsonEntityArray.put(jsonEntity);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -71,7 +70,7 @@ public class HighScore extends HttpServlet {
 		// Places the location parameters in the same entity group as the Location record
 		Entity highscoreInst = new Entity(ENTITY_NAME);
 
-		highscoreInst.setProperty("name", req.getParameter("name"));
+		highscoreInst.setProperty("alias", req.getParameter("alias"));
 		highscoreInst.setProperty("score", Long.parseLong(req.getParameter("score")));
 		
 		// Now put the entry to Google data store

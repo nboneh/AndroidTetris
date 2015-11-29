@@ -20,27 +20,27 @@ public class Settings {
 
     SharedPreferences sharedPref;
 
-    private Settings(Context context){
-        sharedPref = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+    private Settings(Context context) {
+        sharedPref = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
         load();
     }
 
-    public static Settings getInstance(Context context){
-        if(instance == null){
+    public static Settings getInstance(Context context) {
+        if (instance == null) {
             instance = new Settings(context);
         }
         return instance;
     }
 
 
-    public  void load(){
+    public void load() {
         musicVolume = sharedPref.getFloat(MUSIC_VOLUME_KEY, 1);
         soundVolume = sharedPref.getFloat(SOUND_VOLUME_KEY, 1);
         theme = sharedPref.getInt(THEME_KEY, 0);
         alias = sharedPref.getString(ALIAS_KEY, "Tetris");
     }
 
-    public  void save(){
+    public void save() {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putFloat(MUSIC_VOLUME_KEY, musicVolume);
         editor.putFloat(SOUND_VOLUME_KEY, soundVolume);
@@ -50,19 +50,19 @@ public class Settings {
     }
 
 
-    public void setSoundVolume(float soundVolume){
+    public void setSoundVolume(float soundVolume) {
         this.soundVolume = soundVolume;
     }
 
-    public void setMusicVolume(float musicVolume){
+    public void setMusicVolume(float musicVolume) {
         this.musicVolume = musicVolume;
     }
 
-    public float getMusicVolume(){
+    public float getMusicVolume() {
         return musicVolume;
     }
 
-    public float getSoundVolume(){
+    public float getSoundVolume() {
         return soundVolume;
     }
 

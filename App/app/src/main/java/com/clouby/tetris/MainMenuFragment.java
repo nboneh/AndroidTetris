@@ -21,19 +21,19 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        ((Button)v.findViewById(R.id.play_button)).setOnClickListener(this);
-        ((Button)v.findViewById(R.id.highscores_button)).setOnClickListener(this);
+        ((Button) v.findViewById(R.id.play_button)).setOnClickListener(this);
+        ((Button) v.findViewById(R.id.highscores_button)).setOnClickListener(this);
         ((Button) v.findViewById(R.id.help_button)).setOnClickListener(this);
-        ((Button)v.findViewById(R.id.settings_button)).setOnClickListener(this);
+        ((Button) v.findViewById(R.id.settings_button)).setOnClickListener(this);
         return v;
     }
 
     @Override
-    public  void onClick(View v){
+    public void onClick(View v) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
                 .beginTransaction();
         Fragment fragment = null;
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.play_button:
                 fragment = new GameFragment();
                 break;

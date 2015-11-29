@@ -13,7 +13,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         //Setting theme from Settings
-        switch(Settings.getInstance(this).getTheme()) {
+        switch (Settings.getInstance(this).getTheme()) {
             case 0:
                 setTheme(R.style.AppThemeLight);
                 break;
@@ -23,7 +23,7 @@ public class MainActivity extends FragmentActivity {
         }
 
         setContentView(R.layout.activity_main);
-        FragmentTransaction fragmentTransaction =getSupportFragmentManager()
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
         Fragment fragment = new MainMenuFragment();
         fragmentTransaction
@@ -32,13 +32,13 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onPause(){
-         super.onPause();
+    protected void onPause() {
+        super.onPause();
         Settings.getInstance(this).save();
     }
 
     @Override
-    protected  void onResume(){
+    protected void onResume() {
         super.onResume();
         //Incase phone gained connectivity while the app was in background, send score to the web app
         DatabaseHandler.getInstance(this).sendHighscoresToWebApp();

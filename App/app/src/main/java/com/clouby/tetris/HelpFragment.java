@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,40 +17,39 @@ import android.widget.RadioGroup;
 /**
  * Created by nboneh on 11/15/2015.
  */
-public class HelpFragment extends Fragment implements View.OnClickListener{
+public class HelpFragment extends Fragment  {
 
     private RadioGroup radioGroup;
     private ViewPager viewPager;
 
-   private int[] images = {
+    private int[] images = {
             R.drawable.bulbasaur,
             R.drawable.charmander,
             R.drawable.squirtle
     };
 
     private ImageSwitcher imgSwitcher;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_help, container, false);
-        ((Button)v.findViewById(R.id.back_button)).setOnClickListener(this);
 
         CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getActivity());
         final ViewPager viewPager = (ViewPager) v.findViewById(R.id.pager);
         viewPager.setAdapter(customPagerAdapter);
 
         //Adding radiobuttons to control pager
-        radioGroup = (RadioGroup)v.findViewById(R.id.radiogroup);
+        radioGroup = (RadioGroup) v.findViewById(R.id.radiogroup);
         RadioButton button;
-        for(int i = 0; i < images.length; i++) {
+        for (int i = 0; i < images.length; i++) {
             button = new RadioButton(getActivity());
             radioGroup.addView(button);
         }
 
         radioGroup.check(radioGroup.getChildAt(0).getId());
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // Setting page to the number of radio button
@@ -119,12 +117,4 @@ public class HelpFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    @Override
-    public  void onClick(View v){
-        switch(v.getId()){
-            case R.id.back_button:
-                getActivity().getSupportFragmentManager().popBackStack();
-                break;
-        }
-    }
 }

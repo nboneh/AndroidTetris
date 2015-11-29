@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * Created by nboneh on 11/15/2015.
  */
-public class GameFragment extends Fragment{
+public class GameFragment extends Fragment {
 
 
     @Override
@@ -23,7 +23,7 @@ public class GameFragment extends Fragment{
         return v;
     }
 
-    private void gameOver(){
+    private void gameOver() {
         //Popping up to main menu screen to
         getActivity().getSupportFragmentManager().popBackStack();
 
@@ -31,10 +31,10 @@ public class GameFragment extends Fragment{
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
                 .beginTransaction();
 
-        Random rand = new  Random();
+        Random rand = new Random();
         Fragment fragment = new GameOverFragment();
         Bundle args = new Bundle();
-        args.putInt("score",rand.nextInt(100) );
+        args.putInt("score", rand.nextInt(100));
         fragment.setArguments(args);
         fragmentTransaction
                 .replace(R.id.fragment, fragment);

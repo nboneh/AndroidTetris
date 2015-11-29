@@ -16,19 +16,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back"
-        android:id="@+id/back_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="450dp"
         android:layout_marginTop="35dp">
     </android.support.v4.view.ViewPager>
 
@@ -36,7 +27,7 @@
         android:id="@+id/radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
-        android:layout_above="@+id/back_button"
+        android:layout_below="@id/pager"
         android:layout_centerHorizontal="true"
         android:orientation='horizontal'></RadioGroup>
 
