@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Play"
         android:id="@+id/play_button"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="320dp"
         android:layout_centerHorizontal="true" />
 
 
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="HighScores"
-        android:id="@+id/highscore_button"
+        android:id="@+id/highscores_button"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/play_button"
         android:layout_centerHorizontal="true" />
@@ -40,7 +40,7 @@
         android:text="Help"
         android:id="@+id/help_button"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/highscore_button"
+        android:layout_below="@+id/highscores_button"
         android:layout_centerHorizontal="true" />
 
     <Button

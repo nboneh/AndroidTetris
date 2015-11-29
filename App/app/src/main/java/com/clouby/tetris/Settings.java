@@ -11,13 +11,15 @@ public class Settings {
     private static final String MUSIC_VOLUME_KEY = "musicVolume";
     private static final String SOUND_VOLUME_KEY = "soundVolume";
     private static final String THEME_KEY = "theme";
+    private static final String ALIAS_KEY = "alias";
 
     private HighScoreContainer[] localHighscores;
     private float musicVolume;
     private float soundVolume;
     private int theme;
+    private String alias;
 
-    private static Settings inst = null;
+    private static Settings instance = null;
 
     SharedPreferences sharedPref;
 
@@ -30,11 +32,11 @@ public class Settings {
         load();
     }
 
-    public static Settings getInst(Context context){
-        if(inst == null){
-            inst = new Settings(context);
+    public static Settings getInstance(Context context){
+        if(instance == null){
+            instance = new Settings(context);
         }
-        return inst;
+        return instance;
     }
 
 
@@ -42,6 +44,7 @@ public class Settings {
         musicVolume = sharedPref.getFloat(MUSIC_VOLUME_KEY, 1);
         soundVolume = sharedPref.getFloat(SOUND_VOLUME_KEY, 1);
         theme = sharedPref.getInt(THEME_KEY, 0);
+        alias = sharedPref.getString(ALIAS_KEY, "Tetris");
     }
 
     public  void save(){
@@ -49,6 +52,7 @@ public class Settings {
         editor.putFloat(MUSIC_VOLUME_KEY, musicVolume);
         editor.putFloat(SOUND_VOLUME_KEY, soundVolume);
         editor.putInt(THEME_KEY, theme);
+        editor.putString(ALIAS_KEY, alias);
         editor.commit();
     }
 
@@ -75,6 +79,14 @@ public class Settings {
 
     public void setTheme(int theme) {
         this.theme = theme;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
  /*   public static void loadOnlineHighScores(final Handler h){

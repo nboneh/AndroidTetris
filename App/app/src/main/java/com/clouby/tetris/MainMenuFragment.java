@@ -22,7 +22,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         ((Button)v.findViewById(R.id.play_button)).setOnClickListener(this);
-        ((Button)v.findViewById(R.id.highscore_button)).setOnClickListener(this);
+        ((Button)v.findViewById(R.id.highscores_button)).setOnClickListener(this);
         ((Button) v.findViewById(R.id.help_button)).setOnClickListener(this);
         ((Button)v.findViewById(R.id.settings_button)).setOnClickListener(this);
         return v;
@@ -37,8 +37,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             case R.id.play_button:
                 fragment = new GameFragment();
                 break;
-            case R.id.highscore_button:
-                fragment = new HighScoreFragment();
+            case R.id.highscores_button:
+                fragment = new HighScoresFragment();
                 break;
             case R.id.help_button:
                 fragment = new HelpFragment();

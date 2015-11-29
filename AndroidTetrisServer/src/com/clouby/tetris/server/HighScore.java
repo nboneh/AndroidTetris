@@ -71,8 +71,6 @@ public class HighScore extends HttpServlet {
 		// Places the location parameters in the same entity group as the Location record
 		Entity highscoreInst = new Entity(ENTITY_NAME);
 
-
-		highscoreInst.setProperty("date", new Date(Long.parseLong(req.getParameter("date"))));
 		highscoreInst.setProperty("name", req.getParameter("name"));
 		highscoreInst.setProperty("score", Long.parseLong(req.getParameter("score")));
 		

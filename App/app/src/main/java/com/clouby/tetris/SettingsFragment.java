@@ -28,7 +28,7 @@ public class SettingsFragment  extends Fragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        settings = Settings.getInst(getActivity());
+        settings = Settings.getInstance(getActivity());
     }
 
     @Override

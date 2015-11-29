@@ -13,7 +13,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         //Setting theme from Settings
-        switch(Settings.getInst(this).getTheme()) {
+        switch(Settings.getInstance(this).getTheme()) {
             case 0:
                 setTheme(R.style.AppThemeLight);
                 break;
@@ -34,6 +34,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onPause(){
          super.onPause();
-        Settings.getInst(this).save();
+        Settings.getInstance(this).save();
     }
 }
