@@ -6,64 +6,76 @@ import android.content.SharedPreferences;
 
 public class Settings {
 
-
-    private static final int HIGHSCORE_SIZE = 5;
-    private static final String WEB_URL ="http://retrospacescores.appspot.com/highscore";
     private static final String MUSIC_VOLUME_KEY = "musicVolume";
     private static final String SOUND_VOLUME_KEY = "soundVolume";
-
-    private HighScoreContainer[] localHighscores;
+    private static final String THEME_KEY = "theme";
+    private static final String ALIAS_KEY = "alias";
+    private static Settings instance = null;
+    SharedPreferences sharedPref;
     private float musicVolume;
     private float soundVolume;
+    private int theme;
+    private String alias;
 
-    private static Settings inst = null;
-
-    SharedPreferences sharedPref;
-
-    private Settings(Context context){
-        sharedPref = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        localHighscores = new HighScoreContainer[HIGHSCORE_SIZE];
-        for(int i = 0; i < HIGHSCORE_SIZE; i++){
-            localHighscores[i] = new HighScoreContainer();
-        }
+    private Settings(Context context) {
+        sharedPref = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
         load();
     }
 
-    public static Settings getInst(Context context){
-        if(inst == null){
-            inst = new Settings(context);
+    public static Settings getInstance(Context context) {
+        if (instance == null) {
+            instance = new Settings(context);
         }
-        return inst;
+        return instance;
     }
 
 
-    public  void load(){
+    public void load() {
         musicVolume = sharedPref.getFloat(MUSIC_VOLUME_KEY, 1);
         soundVolume = sharedPref.getFloat(SOUND_VOLUME_KEY, 1);
+        theme = sharedPref.getInt(THEME_KEY, 0);
+        alias = sharedPref.getString(ALIAS_KEY, "Tetris");
     }
 
-    public  void save(){
+    public void save() {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putFloat(MUSIC_VOLUME_KEY, musicVolume);
         editor.putFloat(SOUND_VOLUME_KEY, soundVolume);
+        editor.putInt(THEME_KEY, theme);
+        editor.putString(ALIAS_KEY, alias);
         editor.commit();
     }
 
-
-    public void setSoundVolume(float soundVolume){
-        this.soundVolume = soundVolume;
-    }
-
-    public void setMusicVolume(float musicVolume){
-        this.musicVolume = musicVolume;
-    }
-
-    public float getMusicVolume(){
+    public float getMusicVolume() {
         return musicVolume;
     }
 
-    public float getSoundVolume(){
+    public void setMusicVolume(float musicVolume) {
+        this.musicVolume = musicVolume;
+    }
+
+    public float getSoundVolume() {
         return soundVolume;
+    }
+
+    public void setSoundVolume(float soundVolume) {
+        this.soundVolume = soundVolume;
+    }
+
+    public int getTheme() {
+        return theme;
+    }
+
+    public void setTheme(int theme) {
+        this.theme = theme;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
  /*   public static void loadOnlineHighScores(final Handler h){

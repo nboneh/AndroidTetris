@@ -2,22 +2,17 @@ package com.clouby.tetris;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-
-import android.widget.ImageView;
-
+import java.util.Random;
 /**
  * Created by Shirong on 11/19/2015.
  */
 public class GameFragment extends Fragment implements View.OnClickListener{
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,5 +35,22 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    private void gameOver() {
+        //Popping up to main menu screen to
+        getActivity().getSupportFragmentManager().popBackStack();
 
+        //Transition to game over fragment
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
+                .beginTransaction();
+
+        Random rand = new Random();
+        Fragment fragment = new GameOverFragment();
+        Bundle args = new Bundle();
+        args.putInt("score", rand.nextInt(100));
+        fragment.setArguments(args);
+        fragmentTransaction
+                .replace(R.id.fragment, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

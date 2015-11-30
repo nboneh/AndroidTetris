@@ -1,27 +1,21 @@
 package com.clouby.tetris.game;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.view.SurfaceHolder;
 
-/**
- * Created by bunny on 11/29/2015.
- */
 public class MainThread extends Thread {
+    public static Canvas canvas;
     public int FPS = 30;
     public double averageFPS;
-
     private SurfaceHolder surfaceHolder;
     private GameView gameView;
-
     private boolean running;
-
-    public static Canvas canvas;
 
     public MainThread(SurfaceHolder surfaceHolder, GameView gameView){
         super();
         this.surfaceHolder= surfaceHolder;
         this.gameView = gameView;
-
     }
 
     @Override
