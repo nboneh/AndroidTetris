@@ -1,22 +1,28 @@
 package com.clouby.tetris.game.block;
 
+import android.graphics.Paint;
+
 public class TetrisBox implements Cloneable {
-    /*
-     * Color->true, use foreground color, ->false, use background color
-     */
-    private boolean Color;
+    Paint paint= new Paint();
     private Dimension size = new Dimension();
 
-    public TetrisBox(boolean Color) {
-        this.Color = Color;
+    public TetrisBox(int color) {
+        //border's properties
+        paint.setColor(color);
+        paint.setStrokeWidth(0);
+        paint.setStyle(Paint.Style.STROKE);
     }
 
-    public boolean isColor() {
-        return Color;
+    public Paint getPaint() {
+        return paint;
     }
 
-    public void setColor(boolean color) {
-        Color = color;
+    public int getColor() {
+        return paint.getColor();
+    }
+
+    public void setColor(int color) {
+        paint.setColor(color);
     }
 
     public Dimension getSize() {

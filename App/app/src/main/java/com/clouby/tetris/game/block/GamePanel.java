@@ -5,8 +5,8 @@ import android.graphics.Color;
 
 import com.clouby.tetris.game.GameView;
 
-//game canvas, contains <#rows>*<#cols> implementation
-public class GameCanvas{
+//game panel, contains <#rows>*<#cols> implementation
+public class GamePanel {
 
     private int backColor = Color.BLACK, frontColor = Color.DKGRAY;
 
@@ -15,11 +15,23 @@ public class GameCanvas{
     private int scoreForLevelUpdate = 0;
 
     private TetrisBox[][] boxes;
-    private int boxWidth, boxHeight;
+    private float boxWidth, boxHeight;
 
-    public int getBackColor() {
-        return backColor;
+    public GamePanel(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+
+        //initialize rows*cols TetrisBox
+        boxes = new TetrisBox[rows][cols];
+        for (int i = 0; i < boxes.length; i++) {
+            for (int j = 0; j < boxes[i].length; j++) {
+                boxes[i][j] = new TetrisBox(Color.YELLOW);
+            }
+        }
+
     }
+
+    public int getBackColor() { return backColor; }
 
     public void setBackColor(int backColor) {
         this.backColor = backColor;
@@ -92,7 +104,7 @@ public class GameCanvas{
 
         score += GameView.PER_LINE_SCORE;
         scoreForLevelUpdate += GameView.PER_LINE_SCORE;
-//        repaint();
+        update();
     }
 
     //reset the canvas
@@ -101,23 +113,24 @@ public class GameCanvas{
         scoreForLevelUpdate = 0;
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++)
-                boxes[i][j].setColor(false);
+                boxes[i][j].setColor(backColor);
         }
 
-//        repaint();
+        update();
     }
 
-//    public void paintComponent(Canvas canvas) {
-//
-//        canvas.setColor(frontColor);
-//        for (int i = 0; i < boxes.length; i++) {
-//            for (int j = 0; j < boxes[i].length; j++) {
-//                //use background color or foreground color to draw each box
-//                canvas.setColor(boxes[i][j].isColor() ? frontColor : backColor);
-//                canvas.fill3DRect(j * boxWidth, i * boxHeight,
-//                        boxWidth, boxHeight, true);
-//            }
-//        }
-//    }
+    public void draw(Canvas canvas) {
+        fanning(canvas);
+
+        for (int i = 0; i < boxes.length; i++) {
+            for (int j = 0; j < boxes[i].length; j++) {
+                //use background color or foreground color to draw each box
+                canvas.drawRect(j * boxWidth, i * boxHeight,
+                        (j+1) * boxWidth, (i+1) * boxHeight, boxes[i][j].getPaint() );
+            }
+        }
+    }
+
+    public void update(){}
 
 }

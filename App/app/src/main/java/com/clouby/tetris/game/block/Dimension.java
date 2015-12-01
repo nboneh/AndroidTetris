@@ -1,13 +1,13 @@
 package com.clouby.tetris.game.block;
 
 public class Dimension {
-    public int width;
-    public int height;
+    public float width;
+    public float height;
 
     public Dimension() {
     }
 
-    public Dimension(int w, int h) {
+    public Dimension(float w, float h) {
         width = w;
         height = h;
     }
@@ -17,7 +17,7 @@ public class Dimension {
         this.height = p.height;
     }
 
-    public final void set(int w, int h) {
+    public final void set(float w, float h) {
         width = w;
         height = h;
     }
@@ -27,7 +27,7 @@ public class Dimension {
         this.height = d.height;
     }
 
-    public final boolean equals(int w, int h) {
+    public final boolean equals(float w, float h) {
         return this.width == w && this.height == h;
     }
 
