@@ -7,10 +7,9 @@ public class TetrisBox implements Cloneable {
     private Dimension size = new Dimension();
 
     public TetrisBox(int color) {
-        //border's properties
+        //paint properties
         paint.setColor(color);
-        paint.setStrokeWidth(0);
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL);
     }
 
     public Paint getPaint() {
@@ -24,6 +23,8 @@ public class TetrisBox implements Cloneable {
     public void setColor(int color) {
         paint.setColor(color);
     }
+
+    public void setStyle(Paint.Style style){ paint.setStyle(style); }
 
     public Dimension getSize() {
         return size;

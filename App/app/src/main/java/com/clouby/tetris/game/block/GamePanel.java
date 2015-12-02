@@ -3,19 +3,40 @@ package com.clouby.tetris.game.block;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-import com.clouby.tetris.game.GameView;
+import com.clouby.tetris.game.block.Shape.Shape;
 
 //game panel, contains <#rows>*<#cols> implementation
 public class GamePanel {
+    //score per line
+    public final static int PER_LINE_SCORE = 100;
+    //score needed to upgrade level
+    public final static int PER_LEVEL_SCORE = PER_LINE_SCORE * 20;
+    //maximum level
+    public final static int MAX_LEVEL = 10;
+    //default level
+    public final static int DEFAULT_LEVEL = 5;
 
-    private int backColor = Color.BLACK, frontColor = Color.DKGRAY;
+    //to smooth the level upgrade
+    public final static int LEVEL_FLATNESS_FACTOR = 3;
+    //time delay between levels in unit of microseconds
+    public final static int TIME_BETWEEN_LEVELS = 50;
+
+    //number of shapes
+    public final static int TYPE_OF_SHAPE = 7;
+    public final static String[] shapeType = new String[]{"I", "J", "L", "O", "S", "T", "Z"};
+
+    //borderWidth/BoxWidth or borderHeight/BoxHeight
+    private float borderWidthRatio = 0.01f;
 
     private int rows, cols;
     private int score = 0;
     private int scoreForLevelUpdate = 0;
 
+    //all possible TetrisBox on the canvas
     private TetrisBox[][] boxes;
-    private float boxWidth, boxHeight;
+    private int boxWidth, boxHeight;
+
+    private  TetrisShapeStore tetrisShapeStore;
 
     public GamePanel(int rows, int cols) {
         this.rows = rows;
@@ -25,24 +46,13 @@ public class GamePanel {
         boxes = new TetrisBox[rows][cols];
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++) {
-                boxes[i][j] = new TetrisBox(Color.YELLOW);
+                boxes[i][j] = new TetrisBox(TetrisShapeStore.backgroundColor);
             }
         }
 
-    }
-
-    public int getBackColor() { return backColor; }
-
-    public void setBackColor(int backColor) {
-        this.backColor = backColor;
-    }
-
-    public int getFrontColor() {
-        return frontColor;
-    }
-
-    public void setFrontColor(int frontColor) {
-        this.frontColor = frontColor;
+        tetrisShapeStore = new TetrisShapeStore("T");
+        tetrisShapeStore.setStyle(0);
+        tetrisShapeStore.setColor();
     }
 
     public int getRows() {
@@ -79,10 +89,10 @@ public class GamePanel {
 
     //after upgrade level, reset the score to zero
     public void resetScoreForLevelUpdate() {
-        scoreForLevelUpdate -= GameView.PER_LEVEL_SCORE;
+        scoreForLevelUpdate -= PER_LEVEL_SCORE;
     }
 
-    public TetrisBox getBoxes(int row, int col) {
+    public TetrisBox getBox(int row, int col) {
         if (row < 0 || row > boxes.length - 1
                 || col < 0 || col > boxes[0].length - 1)
             return null;
@@ -102,8 +112,8 @@ public class GamePanel {
             }
         }
 
-        score += GameView.PER_LINE_SCORE;
-        scoreForLevelUpdate += GameView.PER_LINE_SCORE;
+        score += PER_LINE_SCORE;
+        scoreForLevelUpdate += PER_LINE_SCORE;
         update();
     }
 
@@ -113,24 +123,31 @@ public class GamePanel {
         scoreForLevelUpdate = 0;
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++)
-                boxes[i][j].setColor(backColor);
+                boxes[i][j].setColor(TetrisShapeStore.backgroundColor);
         }
 
         update();
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas){
         fanning(canvas);
 
-        for (int i = 0; i < boxes.length; i++) {
-            for (int j = 0; j < boxes[i].length; j++) {
-                //use background color or foreground color to draw each box
-                canvas.drawRect(j * boxWidth, i * boxHeight,
-                        (j+1) * boxWidth, (i+1) * boxHeight, boxes[i][j].getPaint() );
+        for(int i=0; i< Shape.BOXES_ROWS; ++i){
+            for(int j=0; j<Shape.BOXES_COLS; ++j){
+                //draw the boxes if and only the color of the box is not the default backgroundColor
+                if(tetrisShapeStore.getBoxes()[i][j].getColor()!=TetrisShapeStore.backgroundColor) {
+                    canvas.drawRect((tetrisShapeStore.getX() + j + borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + borderWidthRatio) * boxHeight,
+                            (tetrisShapeStore.getX() + j + 1 - borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + 1 - borderWidthRatio) * boxHeight,
+                            tetrisShapeStore.getBoxes()[i][j].getPaint());
+                }
             }
         }
     }
 
-    public void update(){}
+    //dynamic things
+    public void update(){
+        tetrisShapeStore.moveDown(this);
+
+    }
 
 }

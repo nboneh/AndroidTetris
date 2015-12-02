@@ -13,15 +13,6 @@ import com.clouby.tetris.R;
 import com.clouby.tetris.game.block.GamePanel;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
-    //score per line
-    public final static int PER_LINE_SCORE = 100;
-    //score needed to upgrade level
-    public final static int PER_LEVEL_SCORE = PER_LINE_SCORE * 20;
-    //maximum level
-    public final static int MAX_LEVEL = 10;
-    //default level
-    public final static int DEFAULT_LEVEL = 5;
-
     //background image
     public int backgroundImageID;
     public final BitmapFactory.Options imageOptions = new BitmapFactory.Options();
@@ -107,6 +98,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             canvas.restoreToCount(savedState);
 
             gamePanel.draw(canvas);
+
         }
     }
 
