@@ -25,8 +25,10 @@ public class GamePanel {
     public final static int TYPE_OF_SHAPE = 7;
     public final static String[] shapeType = new String[]{"I", "J", "L", "O", "S", "T", "Z"};
 
-    //borderWidth/BoxWidth or borderHeight/BoxHeight
+    //borderWidth/BoxWidth
     private float borderWidthRatio = 0.01f;
+    //borderHeight/BoxHeight
+    private float borderHeightRatio = 0.015f;
 
     private int rows, cols;
     private int score = 0;
@@ -50,7 +52,7 @@ public class GamePanel {
             }
         }
 
-        tetrisShapeStore = new TetrisShapeStore("T");
+        tetrisShapeStore = new TetrisShapeStore("Z");
         tetrisShapeStore.setStyle(0);
         tetrisShapeStore.setColor();
     }
@@ -136,8 +138,8 @@ public class GamePanel {
             for(int j=0; j<Shape.BOXES_COLS; ++j){
                 //draw the boxes if and only the color of the box is not the default backgroundColor
                 if(tetrisShapeStore.getBoxes()[i][j].getColor()!=TetrisShapeStore.backgroundColor) {
-                    canvas.drawRect((tetrisShapeStore.getX() + j + borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + borderWidthRatio) * boxHeight,
-                            (tetrisShapeStore.getX() + j + 1 - borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + 1 - borderWidthRatio) * boxHeight,
+                    canvas.drawRect((tetrisShapeStore.getX() + j + borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + borderHeightRatio) * boxHeight,
+                            (tetrisShapeStore.getX() + j + 1 - borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + 1 - borderHeightRatio) * boxHeight,
                             tetrisShapeStore.getBoxes()[i][j].getPaint());
                 }
             }

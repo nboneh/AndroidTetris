@@ -6,6 +6,6 @@ import android.graphics.Color;
 public class SShape extends Shape {
     public SShape() {
         super(new int[]{0x4620, 0x6c00, 0x4620, 0x6c00});
-        setColor(Color.GREEN);
+        setColor(Color.parseColor("#47f26d"));
     }
 }

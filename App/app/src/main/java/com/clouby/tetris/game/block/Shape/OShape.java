@@ -6,6 +6,6 @@ import android.graphics.Color;
 public class OShape extends Shape {
     public OShape() {
         super(new int[]{0x0660, 0x0660, 0x0660, 0x0660});
-        setColor(Color.YELLOW);
+        setColor(Color.parseColor("#ffb359"));
     }
 }

@@ -20,18 +20,18 @@
         android:id="@+id/new_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="170dp"
+        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/main_menu_button"
         android:text="New Game" />
 
     <Button
         android:id="@+id/main_menu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/highscores_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="30dp"
         android:text="Main Menu" />
 
     <Button
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/new_game_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="90dp"
         android:text="Your Score: "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 </RelativeLayout>

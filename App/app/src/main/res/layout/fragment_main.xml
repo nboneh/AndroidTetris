@@ -21,7 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="320dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/highscores_button"
         android:text="Play" />
 
 
@@ -29,27 +30,27 @@
         android:id="@+id/highscores_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/play_button"
+        android:layout_above="@+id/help_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:text="HighScores" />
 
     <Button
         android:id="@+id/help_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/highscores_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/settings_button"
         android:text="Help" />
 
     <Button
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/help_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
         android:text="Settings" />
 
 </RelativeLayout>

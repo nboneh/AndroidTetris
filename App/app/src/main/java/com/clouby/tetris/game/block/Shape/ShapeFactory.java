@@ -5,7 +5,7 @@ public class ShapeFactory {
         Shape shape = null;
 
         if (type.equals("I")) {
-            shape = null;
+            shape = new IShape();
         } else if (type.equals("J")) {
             shape = new JShape();
         } else if (type.equals("L")) {
