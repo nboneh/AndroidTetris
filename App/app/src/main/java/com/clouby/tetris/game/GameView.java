@@ -1,7 +1,6 @@
 package com.clouby.tetris.game;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -17,7 +16,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     public int backgroundImageID;
     public final BitmapFactory.Options imageOptions = new BitmapFactory.Options();
 
-    private MainThread thread;
+    private GameThread thread;
     private Background bg;
     private GamePanel gamePanel;
 
@@ -28,7 +27,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         //add the callback to the surfaceHolder to intercept events
         getHolder().addCallback(this);
 
-        thread = new MainThread(getHolder(), this);
+        thread = new GameThread(getHolder(), this);
         //make gamePanel focusable so it can handle events
         setFocusable(true);
 

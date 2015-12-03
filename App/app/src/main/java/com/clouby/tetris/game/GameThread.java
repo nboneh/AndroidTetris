@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.SurfaceHolder;
 
-public class MainThread extends Thread {
+public class GameThread extends Thread {
     public static Canvas canvas;
     public int FPS = 30;
     public double averageFPS;
@@ -12,7 +12,7 @@ public class MainThread extends Thread {
     private GameView gameView;
     private boolean running;
 
-    public MainThread(SurfaceHolder surfaceHolder, GameView gameView){
+    public GameThread(SurfaceHolder surfaceHolder, GameView gameView){
         super();
         this.surfaceHolder= surfaceHolder;
         this.gameView = gameView;

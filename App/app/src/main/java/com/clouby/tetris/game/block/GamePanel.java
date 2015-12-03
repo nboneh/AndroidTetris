@@ -52,7 +52,8 @@ public class GamePanel {
             }
         }
 
-        tetrisShapeStore = new TetrisShapeStore("Z");
+        tetrisShapeStore = new TetrisShapeStore();
+        tetrisShapeStore.setShape("L");
         tetrisShapeStore.setStyle(0);
         tetrisShapeStore.setColor();
     }

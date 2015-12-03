@@ -19,9 +19,7 @@ public class TetrisShapeStore {
 
     Shape shape;
 
-    public TetrisShapeStore(String type){
-        shape = shapeFactory.createShape(type);
-
+    public TetrisShapeStore(){
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++) {
                 boxes[i][j] = new TetrisBox(backgroundColor);
