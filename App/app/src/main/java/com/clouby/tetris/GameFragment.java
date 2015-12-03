@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.clouby.tetris.game.GameView;
+
 import java.util.Random;
 /**
  * Created by Shirong on 11/19/2015.
@@ -20,6 +22,14 @@ public class GameFragment extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.fragment_game, container, false);
         //pause button
         (v.findViewById(R.id.pause_button)).setOnClickListener(this);
+        //left button
+        (v.findViewById(R.id.left_button)).setOnClickListener(this);
+        //right button
+        (v.findViewById(R.id.right_button)).setOnClickListener(this);
+        //down button
+        (v.findViewById(R.id.down_button)).setOnClickListener(this);
+        //transform
+        (v.findViewById(R.id.transform_button)).setOnClickListener(this);
 
         return v;
     }
@@ -32,6 +42,19 @@ public class GameFragment extends Fragment implements View.OnClickListener{
                 //TODO change later
                 getActivity().getSupportFragmentManager().popBackStack();
                 break;
+            case R.id.left_button:
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveLeft();
+                break;
+            case R.id.right_button:
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveRight();
+                break;
+            case R.id.down_button:
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveDown();
+                break;
+            case R.id.transform_button:
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
+                break;
+
         }
     }
 

@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 
 import com.clouby.tetris.R;
 import com.clouby.tetris.game.block.GamePanel;
+import com.clouby.tetris.game.block.TetrisShapeObject;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     //background image
@@ -99,6 +100,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             gamePanel.draw(canvas);
 
         }
+    }
+
+    public GamePanel getGamePanel(){
+        return gamePanel;
     }
 
 }

@@ -189,4 +189,29 @@ public class GamePanel {
         }
     }
 
+    public  TetrisShapeObject getLastBlockObject(){
+        if(tetrisShapeObjectList.size()>=1){
+            return tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1);
+        }
+        else{
+            return null;
+        }
+    }
+
+    public void moveLeft() {
+        tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).moveLeft(this);
+    }
+
+    public void moveRight() {
+        tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).moveRight(this);
+    }
+
+    public void moveDown() {
+        tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).moveDown(this);
+    }
+
+    public void turnNext(){
+        tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).turnNext(this);
+    }
+
 }

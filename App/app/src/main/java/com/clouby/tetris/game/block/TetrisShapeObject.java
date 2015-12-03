@@ -227,6 +227,4 @@ public class TetrisShapeObject {
         }
     }
 
-
-
 }
