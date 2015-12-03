@@ -16,6 +16,10 @@ public class TetrisBox implements Cloneable {
         return paint;
     }
 
+    public void setPaint(Paint paint) {
+        this.paint = paint;
+    }
+
     public int getColor() {
         return paint.getColor();
     }

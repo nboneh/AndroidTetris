@@ -1,9 +1,12 @@
 package com.clouby.tetris.game.block;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.Paint;
 
-import com.clouby.tetris.game.block.Shape.Shape;
+import com.clouby.tetris.game.block.Shape.ShapeFactory;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 //game panel, contains <#rows>*<#cols> implementation
 public class GamePanel {
@@ -38,7 +41,11 @@ public class GamePanel {
     private TetrisBox[][] boxes;
     private int boxWidth, boxHeight;
 
-    private  TetrisShapeStore tetrisShapeStore;
+    ShapeFactory shapeFactory = new ShapeFactory();;
+
+    Random rand = new Random();
+
+    private ArrayList<TetrisShapeObject> tetrisShapeObjectList = new ArrayList<TetrisShapeObject>();
 
     public GamePanel(int rows, int cols) {
         this.rows = rows;
@@ -48,14 +55,30 @@ public class GamePanel {
         boxes = new TetrisBox[rows][cols];
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++) {
-                boxes[i][j] = new TetrisBox(TetrisShapeStore.backgroundColor);
+                boxes[i][j] = new TetrisBox(TetrisShapeObject.backgroundColor);
             }
         }
 
-        tetrisShapeStore = new TetrisShapeStore();
-        tetrisShapeStore.setShape("L");
-        tetrisShapeStore.setStyle(0);
-        tetrisShapeStore.setColor();
+        TetrisShapeObject tetrisShapeObject  = new TetrisShapeObject(this);
+        tetrisShapeObject.setShape(shapeFactory, shapeType[rand.nextInt(7)]);
+        tetrisShapeObject.setStyle(rand.nextInt(4));
+        tetrisShapeObject.setColor();
+
+        tetrisShapeObjectList.add(tetrisShapeObject);
+    }
+
+    public void addTetrisShapeObject(int shape, int rotation){
+            if(tetrisShapeObjectList.size()>=100){
+            //get rid of the first 50 elements because they are useless
+            tetrisShapeObjectList.subList(0, 50).clear();
+        }
+
+        TetrisShapeObject tetrisShapeObject = new TetrisShapeObject(this);
+        tetrisShapeObject.setShape(shapeFactory, shapeType[shape]);
+        tetrisShapeObject.setStyle(rotation);
+        tetrisShapeObject.setColor();
+        tetrisShapeObjectList.add(tetrisShapeObject);
+
     }
 
     public int getRows() {
@@ -126,31 +149,44 @@ public class GamePanel {
         scoreForLevelUpdate = 0;
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++)
-                boxes[i][j].setColor(TetrisShapeStore.backgroundColor);
+                boxes[i][j].setColor(TetrisShapeObject.backgroundColor);
         }
 
         update();
     }
 
+    public void setBoxColor(int i, int j, int color){
+        boxes[i][j].setColor(color);
+    }
+
+    public void setBoxPaint(int i, int j, Paint paint){
+        boxes[i][j].setPaint(paint);
+    }
+
     public void draw(Canvas canvas){
         fanning(canvas);
 
-        for(int i=0; i< Shape.BOXES_ROWS; ++i){
-            for(int j=0; j<Shape.BOXES_COLS; ++j){
+        for(int i=0; i<boxes.length; ++i){
+            for(int j=0; j<boxes[i].length; ++j){
                 //draw the boxes if and only the color of the box is not the default backgroundColor
-                if(tetrisShapeStore.getBoxes()[i][j].getColor()!=TetrisShapeStore.backgroundColor) {
-                    canvas.drawRect((tetrisShapeStore.getX() + j + borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + borderHeightRatio) * boxHeight,
-                            (tetrisShapeStore.getX() + j + 1 - borderWidthRatio) * boxWidth, (tetrisShapeStore.getY() + i + 1 - borderHeightRatio) * boxHeight,
-                            tetrisShapeStore.getBoxes()[i][j].getPaint());
+                if(boxes[i][j].getColor()!=TetrisShapeObject.backgroundColor){
+                    canvas.drawRect((j + borderWidthRatio) * boxWidth,
+                            (i + borderHeightRatio) * boxHeight,
+                            (j + 1 - borderWidthRatio) * boxWidth,
+                            (i + 1 - borderHeightRatio) * boxHeight,
+                            boxes[i][j].getPaint());
                 }
+
             }
         }
     }
 
-    //dynamic things
-    public void update(){
-        tetrisShapeStore.moveDown(this);
 
+    //dynamic things
+    public void update() {
+        if (!tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).moveDown(this) ){
+            addTetrisShapeObject(rand.nextInt(7), rand.nextInt(4));
+        }
     }
 
 }

@@ -1,34 +1,44 @@
 package com.clouby.tetris.game.block;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 
 import com.clouby.tetris.game.block.Shape.Shape;
 import com.clouby.tetris.game.block.Shape.ShapeFactory;
 
-public class TetrisShapeStore {
+public class TetrisShapeObject {
     //http://www.color-hex.com/
     public final static int backgroundColor = Color.parseColor("#66cdaa");
 
+    public final static int default_x = 0, default_y = 0;
+
     //position of shape
-    private int x = 0, y = 0;
+    private int x = default_x, y = default_y;
     //current style
     private int style;
 
-    ShapeFactory shapeFactory = new ShapeFactory();
+//    ShapeFactory shapeFactory = new ShapeFactory();
     private TetrisBox[][] boxes = new TetrisBox[Shape.BOXES_ROWS][Shape.BOXES_COLS];
 
     Shape shape;
 
-    public TetrisShapeStore(){
+    public TetrisShapeObject(GamePanel gamePanel){
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++) {
                 boxes[i][j] = new TetrisBox(backgroundColor);
             }
         }
 
+        display(gamePanel);
+
     }
 
-    public void setShape( String type) {
+    public void resetPosition(){
+        x = default_x;
+        y = default_y;
+    }
+
+    public void setShape( ShapeFactory shapeFactory, String type) {
         this.shape = shapeFactory.createShape(type);
     }
 
@@ -106,14 +116,14 @@ public class TetrisShapeStore {
         }
     }
 
-    //display current block
+    //display current block, reflect the state of block to canvas
     private void display(GamePanel gamePanel) {
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++) {
                 if (boxes[i][j].getColor()!= backgroundColor) {
                     TetrisBox box = gamePanel.getBox(y + i, x + j);
                     if (box == null) continue;
-                    box.setColor(backgroundColor);
+                    box.setColor(this.shape.getColor());
                 }
             }
         }
@@ -194,16 +204,16 @@ public class TetrisShapeStore {
         return true;
     }
 
-    public void moveLeft(GamePanel gamePanel) {
-        moveTo(gamePanel, y, x - 1);
+    public boolean moveLeft(GamePanel gamePanel) {
+        return moveTo(gamePanel, y, x - 1);
     }
 
-    public void moveRight(GamePanel gamePanel) {
-        moveTo(gamePanel, y, x + 1);
+    public boolean moveRight(GamePanel gamePanel) {
+        return moveTo(gamePanel, y, x + 1);
     }
 
-    public void moveDown(GamePanel gamePanel) {
-        moveTo(gamePanel, y + 1, x);
+    public boolean moveDown(GamePanel gamePanel) {
+        return moveTo(gamePanel, y + 1, x);
     }
 
     public void turnNext(GamePanel gamePanel) {
