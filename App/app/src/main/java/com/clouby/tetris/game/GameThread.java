@@ -26,7 +26,9 @@ public class GameThread extends Thread {
         long totalTime = 0;
         int frameCount = 0;
         //1000 frames
-        long targetTime= 1000/FPS;
+        //long targetTime= 1000/FPS;
+        //20000 frames
+        long targetTime= 20000/FPS;
 
         while (running) {
             startTime = System.nanoTime();

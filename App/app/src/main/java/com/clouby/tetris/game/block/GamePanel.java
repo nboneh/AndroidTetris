@@ -143,6 +143,30 @@ public class GamePanel {
         update();
     }
 
+    /**
+     * examine the canvas to see whether there is line full or not, if there is, remove, increase score, possibly, upgrade level
+     */
+    public void checkFullLine() {
+        for (int i = 0; i < this.rows; i++) {
+            int row = -1;
+            boolean fullLineColorBox = true;
+            for (int j = 0; j < this.cols; j++) {
+                //check ith row, jth col
+                if (boxes[i][j].getColor()== TetrisShapeObject.backgroundColor) {
+                    //not backgroundColor
+                    fullLineColorBox = false;
+                    break;
+                    //next Row
+                }
+            }
+            if (fullLineColorBox) {
+                row = i--;
+                this.removeLine(row);
+                //full line, remove it
+            }
+        }
+    }
+
     //reset the canvas
     public void reset() {
         score = 0;
@@ -166,9 +190,11 @@ public class GamePanel {
     public void draw(Canvas canvas){
         fanning(canvas);
 
+        checkFullLine();
+
         for(int i=0; i<boxes.length; ++i){
             for(int j=0; j<boxes[i].length; ++j){
-                //draw the boxes if and only the color of the box is not the default backgroundColor
+                //draw the boxes if and only if the color of the box is not the default backgroundColor
                 if(boxes[i][j].getColor()!=TetrisShapeObject.backgroundColor){
                     canvas.drawRect((j + borderWidthRatio) * boxWidth,
                             (i + borderHeightRatio) * boxHeight,
@@ -212,6 +238,17 @@ public class GamePanel {
 
     public void turnNext(){
         tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).turnNext(this);
+    }
+
+    /**
+     * check whether the top row is occupied to tell whether the game is over
+     * @return boolean, true-game over, false-game not over
+     */
+    private boolean isGameOver() {
+        for (int i = 0; i < this.getCols(); i++) {
+            if (boxes[0][i].getColor()!=TetrisShapeObject.backgroundColor) return true;
+        }
+        return false;
     }
 
 }

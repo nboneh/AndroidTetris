@@ -193,10 +193,14 @@ public class TetrisShapeObject {
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes[i].length; j++) {
                 boolean isColor = ((newStyle & key) != 0);
-                boxes[i][j].setColor(shape.getColor());
+                if(isColor)
+                    boxes[i][j].setColor(shape.getColor());
+                else
+                    boxes[i][j].setColor(TetrisShapeObject.backgroundColor);
                 key >>= 1;
             }
         }
+
         style = newStyle;
 
         display(gamePanel);
