@@ -16,8 +16,6 @@ import com.clouby.tetris.game.GameView;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.clouby.tetris.Settings.*;
-import com.clouby.tetris.Sounds;
 /**
  * Created by Shirong on 11/19/2015.
  */
