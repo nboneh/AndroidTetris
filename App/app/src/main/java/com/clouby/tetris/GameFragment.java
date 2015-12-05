@@ -34,18 +34,14 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
-
-    SoundPool sp;
-    HashMap<Integer,Integer> spMap;
-    private MediaPlayer musicPlayer;
-   // Sounds sounds;
+    Sounds sounds;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        initSoundPool();
-        loadMusic();
+       Context context = getActivity();
+        sounds.initSoundPool(context);
+        sounds.loadMusic(context);
 
         View v = inflater.inflate(R.layout.fragment_game, container, false);
         //pause button
@@ -85,12 +81,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 pauseAlertDialog();
                 break;
             case R.id.left_button:
-                playSound(3, 1);
+                sounds.playSound(context, 3, 1);
                 ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveLeft();
                 break;
             case R.id.right_button:
                 ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveRight();
-                playSound(3, 1);
+                sounds.playSound(context, 3, 1);
                 break;
             case R.id.down_button:
                 ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveDown();
@@ -98,8 +94,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             case R.id.transform_button:
                 ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
                 ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
-
-                playSound(3, 1);
+                sounds.playSound(context, 3, 1);
                 break;
 
         }
@@ -124,8 +119,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
     public void pauseAlertDialog() {
-        playSound(3, 1);
-        musicPlayer.stop();
+        Context context = getActivity();
+        sounds.playSound(context, 3, 1);
+        sounds.musicPlayer.stop();
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle("Alert");
@@ -149,45 +145,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public void initSoundPool(){
-        sp=new SoundPool(
-                5,
-                AudioManager.STREAM_MUSIC,
-                0
-        );
-        spMap=new HashMap<Integer,Integer>();
-        Context context =getActivity();
-        spMap.put(1, sp.load(context, R.raw.drop_free, 1));
-        spMap.put(2, sp.load(context, R.raw.tetris_free, 1));
-        spMap.put(3, sp.load(context, R.raw.key_free, 1));
 
-    }
-    public void playSound(int sound,int number){
-        Context context =getActivity();
-        AudioManager am=(AudioManager)context.getSystemService(context.AUDIO_SERVICE);
-        float audioMaxVolume=am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float audioCurrentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float volumeRatio=audioCurrentVolume/audioMaxVolume;
-
-        sp.play(
-                spMap.get(sound),
-                volumeRatio,
-                volumeRatio,
-                1,
-                number,
-                1
-        );
-    }
-    public void loadMusic(){
-        Context context = getActivity();
-        AudioManager audioManager=(AudioManager)context.getSystemService(context.AUDIO_SERVICE);
-
-        musicPlayer = MediaPlayer.create(context, R.raw.music);
-        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        musicPlayer.setLooping(true);
-
-        musicPlayer.start();
-    }
 
 
 }

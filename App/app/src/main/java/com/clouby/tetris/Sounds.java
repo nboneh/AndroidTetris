@@ -18,7 +18,7 @@ import static android.app.PendingIntent.getActivity;
 public class Sounds {
     SoundPool sp;
     HashMap<Integer,Integer> spMap;
-    private MediaPlayer musicPlayer;
+    public MediaPlayer musicPlayer;
     Settings settings;
     public void loadMusic(Context context){
       //  Context context = getActivity();
