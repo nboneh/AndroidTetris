@@ -209,10 +209,21 @@ public class GamePanel {
 
 
     //dynamic things
-    public void update() {
+    public boolean update() {
+        //can not move down
         if (!tetrisShapeObjectList.get(tetrisShapeObjectList.size()-1).moveDown(this) ){
-            addTetrisShapeObject(rand.nextInt(7), rand.nextInt(4));
+            //check whether game over or not
+            if(isGameOver())
+                return false;
+            else
+                addTetrisShapeObject(rand.nextInt(7), rand.nextInt(4));
+
+            return true;
         }
+        //still can move down
+        else
+            return true;
+
     }
 
     public  TetrisShapeObject getLastBlockObject(){
@@ -245,10 +256,11 @@ public class GamePanel {
      * @return boolean, true-game over, false-game not over
      */
     private boolean isGameOver() {
-        for (int i = 0; i < this.getCols(); i++) {
+        for (int i = 0; i < cols; i++) {
             if (boxes[0][i].getColor()!=TetrisShapeObject.backgroundColor) return true;
         }
         return false;
+
     }
 
 }
