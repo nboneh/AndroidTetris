@@ -1,8 +1,16 @@
 package com.clouby.tetris.game;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Message;
+import android.util.Log;
 import android.view.SurfaceHolder;
+
+import com.clouby.tetris.GameFragment;
+import com.clouby.tetris.R;
+
+import android.os.Handler;
 
 public class GameThread extends Thread {
     public static Canvas canvas;
@@ -12,10 +20,17 @@ public class GameThread extends Thread {
     private GameView gameView;
     private boolean running;
 
+    private Handler gameOverHandler;
+
     public GameThread(SurfaceHolder surfaceHolder, GameView gameView){
         super();
         this.surfaceHolder= surfaceHolder;
         this.gameView = gameView;
+
+    }
+
+    public void setGameOverHandler(Handler gameOverHandler){
+        this.gameOverHandler = gameOverHandler;
     }
 
     @Override
@@ -26,9 +41,9 @@ public class GameThread extends Thread {
         long totalTime = 0;
         int frameCount = 0;
         //1000 frames
-        //long targetTime= 1000/FPS;
+        long targetTime= 1000/FPS;
         //20000 frames
-        long targetTime= 20000/FPS;
+//        long targetTime= 20000/FPS;
 
         while (running) {
             startTime = System.nanoTime();
@@ -38,8 +53,18 @@ public class GameThread extends Thread {
             try {
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
-                    this.gameView.update();
-                    this.gameView.draw(canvas);
+                    //running
+                    if(running){
+                        boolean lose = !this.gameView.update();
+                        if(lose){
+                            Message msg = new Message();
+                            msg.arg1 = gameView.getScore();
+                            gameOverHandler.sendMessage(msg);
+                            return;
+                        }
+                        this.gameView.draw(canvas);
+                    }
+
                 }
             } catch (Exception e) {
             }
@@ -73,6 +98,7 @@ public class GameThread extends Thread {
         }
 
     }
+
 
     public void setRunning(boolean b){
         running = b;

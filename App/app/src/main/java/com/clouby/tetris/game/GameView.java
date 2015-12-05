@@ -1,15 +1,19 @@
 package com.clouby.tetris.game;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.os.Handler;
 
 import com.clouby.tetris.R;
 import com.clouby.tetris.game.block.GamePanel;
+
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     //background image
@@ -20,10 +24,40 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private Background bg;
     private GamePanel gamePanel;
 
+    private static GameView instance;
+
+    public GameView(Context context) {
+        super(context);
+        //add the callback to the surfaceHolder to intercept events
+        getHolder().addCallback(this);
+
+        thread = new GameThread(getHolder(), this);
+        //make gamePanel focusable so it can handle events
+        setFocusable(true);
+
+        //set image info
+        backgroundImageID= R.drawable.galaxy_6;
+        imageOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(getResources(), backgroundImageID, imageOptions);
+
+    }
+
+    public void pauseGame(){
+        thread.setRunning(false);
+    }
+
+    public void resumeGame(){
+        thread.setRunning(true);
+    }
+
+
+    public void setGameOverHanlder(Handler gameoverHandler ){
+       thread.setGameOverHandler(gameoverHandler);
+    }
+
 
     public GameView(Context context, AttributeSet attr) {
         super(context, attr);
-
         //add the callback to the surfaceHolder to intercept events
         getHolder().addCallback(this);
 
@@ -39,7 +73,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){}
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
+
+    }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -75,9 +111,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         return super.onTouchEvent(event);
     }
 
-    public void update(){
+    //return false if game over
+    public boolean update(){
         bg.update();
-        gamePanel.update();
+        return gamePanel.update();
+
     }
 
     @Override
@@ -99,10 +137,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             gamePanel.draw(canvas);
 
         }
+
     }
 
     public GamePanel getGamePanel(){
         return gamePanel;
     }
+
+    public GameThread getGameThread(){
+        return thread;
+    }
+
+    public int getScore(){return gamePanel.getScore();}
 
 }
