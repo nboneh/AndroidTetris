@@ -14,14 +14,12 @@ public class Settings {
     public static final int LIGHT_THEME = 0;
     public static final int DARK_THEME = 1;
 
+    private static Settings instance = null;
+    SharedPreferences sharedPref;
     private float musicVolume;
     private float soundVolume;
     private int theme;
     private String alias;
-
-    private static Settings instance = null;
-
-    SharedPreferences sharedPref;
 
     private Settings(Context context) {
         sharedPref = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
@@ -52,21 +50,20 @@ public class Settings {
         editor.commit();
     }
 
-
-    public void setSoundVolume(float soundVolume) {
-        this.soundVolume = soundVolume;
+    public float getMusicVolume() {
+        return musicVolume;
     }
 
     public void setMusicVolume(float musicVolume) {
         this.musicVolume = musicVolume;
     }
 
-    public float getMusicVolume() {
-        return musicVolume;
-    }
-
     public float getSoundVolume() {
         return soundVolume;
+    }
+
+    public void setSoundVolume(float soundVolume) {
+        this.soundVolume = soundVolume;
     }
 
     public int getTheme() {

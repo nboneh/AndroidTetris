@@ -30,25 +30,20 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by nboneh on 11/28/2015.
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static DatabaseHandler instance;
-    private ConnectivityManager cm;
-
+    // Highscores Table Columns names
+    public static final String KEY_SCORE = "score";
+    public static final String KEY_ALIAS = "alias";
+    public static final String KEY_SENT_TO_WEBAPP = "sent";
     private static final int DATABASE_VERSION = 1;
-
     private static final String WEB_APP_URL = "https://androidtetrisscores.appspot.com/highscore";
-
-    int NUMBER_OF_LOCAL_HIGHSCORES = 5;
-
     // Database Name
     private static final String DATABASE_NAME = "tetrisDB";
 
     // Highscores table name
     private static final String HIGHSCORE_TABLE_NAME = "highscores";
-
-    // Highscores Table Columns names
-    public static final String KEY_SCORE = "score";
-    public static final String KEY_ALIAS = "alias";
-    public static final String KEY_SENT_TO_WEBAPP = "sent";
+    private static DatabaseHandler instance;
+    int NUMBER_OF_LOCAL_HIGHSCORES = 5;
+    private ConnectivityManager cm;
 
 
     private DatabaseHandler(Context context) {
@@ -173,7 +168,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //Returns false if the user phone is not connected to the internet
-    public boolean  getOnlineHighScores(final Handler h){
+    public boolean getOnlineHighScores(final Handler h) {
         if (!phonehasInternetConnection())
             return false;
 
@@ -198,8 +193,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     List<HighScoreContainer> highscoreList = new ArrayList();
 
                     JSONArray jsonHighscores = new JSONArray(response.toString());
-                    for(int i = 0; i < jsonHighscores.length(); i++) {
-                       JSONObject jsonHighscore = jsonHighscores.getJSONObject(i);
+                    for (int i = 0; i < jsonHighscores.length(); i++) {
+                        JSONObject jsonHighscore = jsonHighscores.getJSONObject(i);
 
                         HighScoreContainer container = new HighScoreContainer();
                         container.setScore(jsonHighscore.getInt("score"));
@@ -210,9 +205,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     msg.obj = highscoreList;
                     h.sendMessage(msg);
 
-                }catch (MalformedURLException e ) {
+                } catch (MalformedURLException e) {
                 } catch (IOException e) {
-                }catch (JSONException e) {
+                } catch (JSONException e) {
                 }
             }
 

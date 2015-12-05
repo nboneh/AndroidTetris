@@ -16,7 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
-/**
+/*
  * Created by nboneh on 11/15/2015.
  */
 public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener, Spinner.OnItemSelectedListener {
@@ -69,6 +69,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         switch (seekBar.getId()) {
+
             case R.id.music_seekbar:
                 settings.setMusicVolume(progress / (float) (seekBar.getMax()));
                 break;

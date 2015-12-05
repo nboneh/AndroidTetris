@@ -17,7 +17,7 @@ import android.widget.RadioGroup;
 /**
  * Created by nboneh on 11/15/2015.
  */
-public class HelpFragment extends Fragment  {
+public class HelpFragment extends Fragment {
 
     private RadioGroup radioGroup;
     private ViewPager viewPager;
