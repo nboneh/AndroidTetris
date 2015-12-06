@@ -47,10 +47,6 @@ public class Panel {
                 boolean isPartOfShape = ((style & key) != 0);
                 if(isPartOfShape)
                      box.setActive(shape.getColor());
-                else {
-                    if(box != null)
-                        box.setInActive();
-                }
                 key >>= 1;
             }
         }

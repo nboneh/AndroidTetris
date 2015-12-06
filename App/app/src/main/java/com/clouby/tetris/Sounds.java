@@ -5,10 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
-
 import java.util.HashMap;
-
-import static android.app.PendingIntent.getActivity;
 
 
 /**
@@ -19,16 +16,17 @@ public  class Sounds {
     private HashMap<Integer, Integer> spMap;
     public  MediaPlayer musicPlayer;
     static Settings settings;
+    AudioManager audioManager;
     private static Sounds instance = null;
     private Context context;
+
     private Sounds(Context c) {
         context =c;
-        AudioManager audioManager=(AudioManager)c.getSystemService(c.AUDIO_SERVICE);
+         audioManager=(AudioManager)c.getSystemService(c.AUDIO_SERVICE);
+        settings = Settings.getInstance(context);
         musicPlayer = MediaPlayer.create(context, R.raw.music);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 30, 0);
-        musicPlayer.setVolume(30,30);
-       // audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) settings.getMusicVolume(), 0);
-       // musicPlayer.setVolume(settings.getMusicVolume(), settings.getMusicVolume());
+        musicPlayer.setVolume(30, 30);
+       musicPlayer.setVolume(settings.getMusicVolume(), settings.getMusicVolume());
     }
     public static Sounds GetInstance(Context context)
     {
@@ -42,6 +40,7 @@ public  class Sounds {
         musicPlayer.pause();
     }
     public void playMusic(){
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (settings.getMusicVolume()*50), 0);
         initSoundPool();
         loadMusic();
         musicPlayer.start();
@@ -58,10 +57,8 @@ public  class Sounds {
         AudioManager am = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
         //am.setStreamVolume(AudioManager.STREAM_MUSIC, (int) settings.getSoundVolume(), 60);
         float audioMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float audioCurrentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float volumeRatio = audioCurrentVolume / audioMaxVolume;
-        // float volumeRatio= settings.getSoundVolume()/audioMaxVolume;
-        // float volumeRatio= settings.getSoundVolume();
+
+         float volumeRatio= settings.getSoundVolume();
         sp.play(
                 spMap.get(Id),
                 volumeRatio,

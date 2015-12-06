@@ -1,15 +1,19 @@
 package com.clouby.tetris.game;
 
-import android.util.Log;
+import android.graphics.Color;
 
 import com.clouby.tetris.game.block.Shape;
 import com.clouby.tetris.game.block.ShapeFactory;
 import com.clouby.tetris.game.block.TetrisBox;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 //game panel, contains <#rows>*<#cols> implementation
 public class BoardPanel extends Panel {
+
+    private final static int WHITE_COLOR = Color.parseColor("#FFFFFF");
     //score per line
     public final static int PER_LINE_SCORE = 100;
     //score needed to upgrade level
@@ -28,6 +32,9 @@ public class BoardPanel extends Panel {
     public final static String[] shapeType = new String[]{"I", "J", "L", "O", "S", "T", "Z"};
 
     private final static long TIME_TILL_PIECE_MOVE_DOWN = 500;
+    private final static long TIME_TO_CLEAR_LINE = 500;
+
+    private  long lineClearCounter = 0;
     private  long pieceMoveDownCounter = 0;
 
 
@@ -42,9 +49,14 @@ public class BoardPanel extends Panel {
     private Shape activeShape;
     Random rand;
 
+    private List<Integer> linesToClear;
+
+    boolean checkingLines = false;
+
     public BoardPanel(int rows, int cols) {
         super(rows,cols);
         rand = new Random();
+        linesToClear = new ArrayList<>();
     }
 
     public int getScore() {
@@ -169,19 +181,53 @@ public class BoardPanel extends Panel {
        return moveTo(activeShape.getX(), activeShape.getY()+1);
     }
 
+    public void checkForLines(){
+        linesToClear.clear();
+        boolean isClearLine;
+        for (int i = 0; i < boxes.length; i++) {
+            isClearLine = true;
+            for (int j = 0; j < boxes[i].length; j++) {
+               TetrisBox box = getBox(i,j);
+                if(!box.isActive()) {
+                    j = boxes[i].length;
+                    isClearLine = false;
+                }
+            }
+            if(isClearLine)
+                linesToClear.add(i);
+        }
+
+        if(!linesToClear.isEmpty())
+
+        for(int i : linesToClear) {
+            for (int j = 0; j < boxes.length; j++) {
+                TetrisBox box = getBox(i,j);
+                box.setActive(WHITE_COLOR);
+            }
+        }
+    }
+
     public void update(long timeInMilliseconds){
-        if(activeShape == null) {
-            generateNewPiece();
-        }
-        Log.d("Time", timeInMilliseconds + "");
+        if(checkingLines){
 
-        if(pieceMoveDownCounter >= TIME_TILL_PIECE_MOVE_DOWN){
-            pieceMoveDownCounter -= TIME_TILL_PIECE_MOVE_DOWN;
-            if(!moveDown())
-                activeShape = null;
+
+            lineClearCounter += timeInMilliseconds;
+        } else {
+            if(activeShape == null) {
+                generateNewPiece();
+            }
+
+            if(pieceMoveDownCounter >= TIME_TILL_PIECE_MOVE_DOWN){
+                pieceMoveDownCounter -= TIME_TILL_PIECE_MOVE_DOWN;
+                if(!moveDown())
+                    activeShape = null;
+
+                checkForLines();
+            }
+
+            pieceMoveDownCounter += timeInMilliseconds;
         }
 
-        pieceMoveDownCounter += timeInMilliseconds;
     }
 
     private void generateNewPiece(){
