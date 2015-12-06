@@ -25,8 +25,6 @@ public  class Sounds {
          audioManager=(AudioManager)c.getSystemService(c.AUDIO_SERVICE);
         settings = Settings.getInstance(context);
         musicPlayer = MediaPlayer.create(context, R.raw.music);
-        musicPlayer.setVolume(30, 30);
-       musicPlayer.setVolume(settings.getMusicVolume(), settings.getMusicVolume());
     }
     public static Sounds GetInstance(Context context)
     {
