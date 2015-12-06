@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.clouby.tetris.game.BoardView;
 import com.clouby.tetris.game.GameThread;
+import com.clouby.tetris.game.UpcomingPieceView;
 
 /**
  * Created by Shirong on 11/19/2015.
@@ -35,7 +36,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_game, container, false);
-        sounds.playMusic();
+//        sounds.playMusic();
         //pause button
         (v.findViewById(R.id.pause_button)).setOnClickListener(this);
         //left button
@@ -48,7 +49,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         (v.findViewById(R.id.transform_button)).setOnClickListener(this);
         boardView = ((BoardView) v.findViewById(R.id.game_surfaceView));
 
-        gameThread = new GameThread((BoardView) v.findViewById(R.id.game_surfaceView));
+        gameThread = new GameThread((BoardView)v.findViewById(R.id.game_surfaceView), ((UpcomingPieceView)v.findViewById(R.id.UpcomingPieceView)));
 
         gameThread.setGameOverHandler(new Handler(getActivity().getMainLooper()) {
                                           public void handleMessage(Message msg) {

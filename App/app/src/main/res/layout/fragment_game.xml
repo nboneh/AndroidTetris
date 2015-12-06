@@ -64,10 +64,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/left_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/pause_button"
         android:layout_toLeftOf="@+id/pause_button"
         android:layout_toStartOf="@+id/pause_button" />
+
+    <com.clouby.tetris.game.UpcomingPieceView
+        android:id="@+id/UpcomingPieceView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pause_button"
+        android:layout_above="@+id/down_button"
+        android:layout_toRightOf="@+id/game_surfaceView" />
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.clouby.tetris.game;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.clouby.tetris.game.block.Shape;
 import com.clouby.tetris.game.block.TetrisBox;
@@ -64,7 +65,6 @@ public class Panel {
     public void draw(Canvas canvas){
         float boxWidth = canvas.getWidth() / cols;
         float boxHeight = canvas.getHeight() / rows;
-
 
         for(int i=0; i<boxes.length; ++i){
             for(int j=0; j<boxes[i].length; ++j){
