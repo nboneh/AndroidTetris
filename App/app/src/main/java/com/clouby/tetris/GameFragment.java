@@ -1,5 +1,6 @@
 package com.clouby.tetris;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.media.AudioManager;
@@ -27,23 +28,20 @@ import java.util.HashMap;
 public class GameFragment extends Fragment implements View.OnClickListener {
 
     private GameView gameView;
-
+    private Sounds sounds ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sounds = Sounds.GetInstance(getActivity());
     }
-
-    Sounds sounds;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       Context context = getActivity();
-        sounds.initSoundPool(context);
-        sounds.loadMusic(context);
 
         View v = inflater.inflate(R.layout.fragment_game, container, false);
+        sounds.playMusic();
         //pause button
         (v.findViewById(R.id.pause_button)).setOnClickListener(this);
         //left button
@@ -73,7 +71,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public  void onClick(View v){
-        Context context =getActivity();
         switch(v.getId()){
             case R.id.pause_button:
                 //TODO change later
@@ -81,12 +78,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 pauseAlertDialog();
                 break;
             case R.id.left_button:
-                sounds.playSound(context, 3, 1);
+                sounds.playSound(3);
                 ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveLeft();
                 break;
             case R.id.right_button:
                 ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveRight();
-                sounds.playSound(context, 3, 1);
+             sounds.playSound( 3);
                 break;
             case R.id.down_button:
                 ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveDown();
@@ -94,7 +91,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             case R.id.transform_button:
                 ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
                 ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
-                sounds.playSound(context, 3, 1);
+              sounds.playSound(3);
                 break;
 
         }
@@ -120,8 +117,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     public void pauseAlertDialog() {
         Context context = getActivity();
-        sounds.playSound(context, 3, 1);
-        sounds.musicPlayer.stop();
+        sounds.playSound(3);
+        sounds.stopMusic();
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle("Alert");
@@ -143,8 +140,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public void onPause() {
         gameView.resumeGame();
     }
-
-
 
 
 
