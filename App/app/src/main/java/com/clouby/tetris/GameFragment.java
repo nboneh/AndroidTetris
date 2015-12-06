@@ -1,13 +1,13 @@
 package com.clouby.tetris;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +18,12 @@ import com.clouby.tetris.game.GameThread;
 /**
  * Created by Shirong on 11/19/2015.
  */
-public class GameFragment extends Fragment implements View.OnClickListener {
+public class GameFragment extends Fragment implements View.OnClickListener, View.OnKeyListener {
 
     private GameThread gameThread;
     private BoardView boardView;
     private Sounds sounds ;
+    private  AlertDialog pauseDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         gameThread.start();
 
+        v.setFocusableInTouchMode(true);
+        v.requestFocus();
+
+        v.setOnKeyListener(this);
+
         return v;
     }
 
@@ -77,14 +83,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.right_button:
                 boardView.moveRight();
-                sounds.playSound(3);
                 break;
             case R.id.down_button:
-                boardView.moveDown();
+                boardView.hardDrop();
                 break;
             case R.id.transform_button:
                 boardView.rotateNext();
-              sounds.playSound(3);
                 break;
 
         }
@@ -94,6 +98,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         //Popping up to main menu screen to
         getActivity().getSupportFragmentManager().popBackStack();
 
+        sounds.playSound(Sounds.GAME_OVER);
         //Transition to game over fragment
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
                 .beginTransaction();
@@ -108,29 +113,29 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         fragmentTransaction.commit();
     }
 
-
     private void pause() {
         gameThread.setRunning(false);
-        Context context = getActivity();
-        sounds.playSound(3);
-        sounds.stopMusic();
-
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-        alertDialog.setTitle("Pause");
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Resume",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        gameThread.setRunning(true);
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Main Menu", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                getActivity().getSupportFragmentManager().popBackStack();
-                dialog.dismiss();
-            }
-        });
-        alertDialog.show();
+        sounds.pauseMusic();
+        if(pauseDialog == null) {
+            pauseDialog = new AlertDialog.Builder(getActivity()).create();
+            pauseDialog.setTitle("Pause");
+            pauseDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Resume",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            gameThread.setRunning(true);
+                            sounds.playMusic();
+                            dialog.dismiss();
+                        }
+                    });
+            pauseDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Main Menu", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    dialog.dismiss();
+                }
+            });
+        }
+        if(isAdded())
+             pauseDialog.show();
 
     }
 
@@ -140,6 +145,22 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         pause();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        gameThread.kill();
+        sounds.stopMusic();
+    }
 
+    @Override
+    public boolean onKey( View v, int keyCode, KeyEvent event )
+    {
+        if( keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            pause();
+            return true;
+        }
+        return false;
+    }
 
 }

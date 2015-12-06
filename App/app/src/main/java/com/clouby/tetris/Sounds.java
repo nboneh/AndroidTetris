@@ -20,12 +20,18 @@ public  class Sounds {
     private static Sounds instance = null;
     private Context context;
 
+    public static final int PLAY_END = 0;
+    public static final int GAME_OVER = 1;
+    public static final int LINE_CLEAR = 2;
+    public static final int TETRIS = 3;
+
     private Sounds(Context c) {
         context =c;
-         audioManager=(AudioManager)c.getSystemService(c.AUDIO_SERVICE);
         settings = Settings.getInstance(context);
         musicPlayer = MediaPlayer.create(context, R.raw.music);
+        audioManager=(AudioManager)c.getSystemService(c.AUDIO_SERVICE);
     }
+
     public static Sounds GetInstance(Context context)
     {
         if (instance == null) {
@@ -38,7 +44,7 @@ public  class Sounds {
         musicPlayer.pause();
     }
     public void playMusic(){
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (settings.getMusicVolume()*50), 0);
+        musicPlayer.setVolume(settings.getMusicVolume()/10, settings.getMusicVolume()/10);
         initSoundPool();
         loadMusic();
         musicPlayer.start();
@@ -49,8 +55,8 @@ public  class Sounds {
     public void loadMusic(){
         musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         musicPlayer.setLooping(true);
-        musicPlayer.setVolume(30, 30);
     }
+
     public void playSound(int Id) {
         AudioManager am = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
         //am.setStreamVolume(AudioManager.STREAM_MUSIC, (int) settings.getSoundVolume(), 60);
@@ -75,9 +81,10 @@ public  class Sounds {
                 0
         );
         spMap = new HashMap<Integer, Integer>();
-        spMap.put(1, sp.load(context, R.raw.drop_free, 1));
-        spMap.put(2, sp.load(context, R.raw.tetris_free, 1));
-        spMap.put(3, sp.load(context, R.raw.key_free, 1));
+        spMap.put(GAME_OVER, sp.load(context, R.raw.gameover, 1));
+        spMap.put(LINE_CLEAR, sp.load(context, R.raw.lineclear, 1));
+        spMap.put(TETRIS, sp.load(context, R.raw.tetris, 1));
+        spMap.put(PLAY_END, sp.load(context, R.raw.playend, 1));
 
 
     }

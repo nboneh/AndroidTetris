@@ -1,7 +1,9 @@
 package com.clouby.tetris.game;
 
 import android.graphics.Color;
+import android.util.Log;
 
+import com.clouby.tetris.Sounds;
 import com.clouby.tetris.game.block.Shape;
 import com.clouby.tetris.game.block.ShapeFactory;
 import com.clouby.tetris.game.block.TetrisBox;
@@ -14,25 +16,15 @@ import java.util.Random;
 public class BoardPanel extends Panel {
 
     private final static int WHITE_COLOR = Color.parseColor("#FFFFFF");
-    //score per line
-    public final static int PER_LINE_SCORE = 100;
-    //score needed to upgrade level
-    public final static int PER_LEVEL_SCORE = PER_LINE_SCORE * 20;
     //maximum level
-    public final static int MAX_LEVEL = 10;
-    //default level
-    public final static int DEFAULT_LEVEL = 5;
-
-    //to smooth the level upgrade
-    public final static int LEVEL_FLATNESS_FACTOR = 3;
-    //time delay between levels in unit of microseconds
-    public final static int TIME_BETWEEN_LEVELS = 50;
+    private final static int MAX_LEVEL = 10;
+    private final static int LINE_CLEAR_TILL_NEXT_LEVEL = 15;
 
     //number of shapes
     public final static String[] shapeType = new String[]{"I", "J", "L", "O", "S", "T", "Z"};
 
     private final static long TIME_TILL_PIECE_MOVE_DOWN = 500;
-    private final static long TIME_TO_CLEAR_LINE = 500;
+    private final static long CLEAR_TIME_ANIMATION = 100;
 
     private  long lineClearCounter = 0;
     private  long pieceMoveDownCounter = 0;
@@ -48,37 +40,23 @@ public class BoardPanel extends Panel {
 
     private Shape activeShape;
     Random rand;
+    int level = 1;
 
     private List<Integer> linesToClear;
 
-    boolean checkingLines = false;
+    private  Sounds sounds;
 
-    public BoardPanel(int rows, int cols) {
+    public BoardPanel(int rows, int cols,Sounds sounds) {
         super(rows,cols);
         rand = new Random();
         linesToClear = new ArrayList<>();
+        this.sounds = sounds;
     }
 
     public int getScore() {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getScoreForLevelUpdate() {
-        return scoreForLevelUpdate;
-    }
-
-    public void setScoreForLevelUpdate(int scoreForLevelUpdate) {
-        this.scoreForLevelUpdate = scoreForLevelUpdate;
-    }
-
-    //after upgrade level, reset the score to zero
-    public void resetScoreForLevelUpdate() {
-        scoreForLevelUpdate -= PER_LEVEL_SCORE;
-    }
 
     public void addTetrisShapeObject(Shape shape){
         super.addTetrisShapeObject(shape);
@@ -99,7 +77,7 @@ public class BoardPanel extends Panel {
             for (int j = x; j < (x +Shape.BOXES_COLS); j++) {
                 TetrisBox tetrisBox = getBox(i,j);
                 boolean isPartOfShape = ((style & key) != 0);
-                if(isPartOfShape) {
+                if( tetrisBox != null && isPartOfShape) {
                     tetrisBox.setInActive();
                 }
                 key >>= 1;
@@ -123,6 +101,8 @@ public class BoardPanel extends Panel {
         int key = 0x8000;
         for (int i = newY; i < (newY+Shape.BOXES_ROWS); i++) {
             for (int j = newX; j < (newX +Shape.BOXES_COLS); j++) {
+                if(i < 0)
+                    continue;
                 TetrisBox tetrisBox = getBox(i,j);
                 boolean isPartOfShape = ((style & key) != 0);
                 if(isPartOfShape) {
@@ -181,8 +161,18 @@ public class BoardPanel extends Panel {
        return moveTo(activeShape.getX(), activeShape.getY()+1);
     }
 
+    public void softDrop(){
+        if(moveDown())
+              score++;
+    }
+
+    public void hardDrop(){
+        while(moveDown())
+            score+=2;
+    }
+
+
     public void checkForLines(){
-        linesToClear.clear();
         boolean isClearLine;
         for (int i = 0; i < boxes.length; i++) {
             isClearLine = true;
@@ -197,7 +187,29 @@ public class BoardPanel extends Panel {
                 linesToClear.add(i);
         }
 
-        if(!linesToClear.isEmpty())
+        switch(linesToClear.size()) {
+            case 0:
+                sounds.playSound(Sounds.PLAY_END);
+                break;
+            case 1:
+                sounds.playSound(Sounds.LINE_CLEAR);
+                score += 40 * level;
+                break;
+            case 2:
+                sounds.playSound(Sounds.LINE_CLEAR);
+                score += 100 * level;
+                break;
+            case 3:
+                sounds.playSound(Sounds.LINE_CLEAR);
+                score += 300 * level;
+                break;
+            case 4:
+                sounds.playSound(Sounds.TETRIS);
+                score += 1200 * level;
+                break;
+        }
+
+
 
         for(int i : linesToClear) {
             for (int j = 0; j < boxes.length; j++) {
@@ -205,12 +217,41 @@ public class BoardPanel extends Panel {
                 box.setActive(WHITE_COLOR);
             }
         }
+
+    }
+
+    private void removeLinesToClear(){
+        for(int line : linesToClear) {
+            //Clearing line
+            for (int j = 0; j < boxes[line].length; j++) {
+                TetrisBox box = getBox(line,j);
+                box.setInActive();
+            }
+            //Shifting line down
+           for(int i = line; i >= 0; i--){
+                for(int j = 0; j < boxes[i].length; j++){
+                    TetrisBox box = getBox(i,j);
+                    TetrisBox replaceBox = getBox(i-1, j);
+                    if(replaceBox != null && box != null){
+                        if(!replaceBox.isActive())
+                            box.setInActive();
+                        else
+                             box.setActive(replaceBox.getColor());
+                    }
+
+                }
+            }
+        }
+
+      linesToClear.clear();
     }
 
     public void update(long timeInMilliseconds){
-        if(checkingLines){
-
-
+        if(!linesToClear.isEmpty()){
+            if(lineClearCounter >= CLEAR_TIME_ANIMATION){
+                removeLinesToClear();
+                lineClearCounter = 0;
+            }
             lineClearCounter += timeInMilliseconds;
         } else {
             if(activeShape == null) {
@@ -219,10 +260,11 @@ public class BoardPanel extends Panel {
 
             if(pieceMoveDownCounter >= TIME_TILL_PIECE_MOVE_DOWN){
                 pieceMoveDownCounter -= TIME_TILL_PIECE_MOVE_DOWN;
-                if(!moveDown())
+                if(!moveDown()) {
                     activeShape = null;
-
-                checkForLines();
+                    checkForLines();
+                }
+                Log.d("Score", score +"");
             }
 
             pieceMoveDownCounter += timeInMilliseconds;
@@ -231,7 +273,9 @@ public class BoardPanel extends Panel {
     }
 
     private void generateNewPiece(){
-       Shape shape = ShapeFactory.createShape(shapeType[ rand.nextInt(shapeType.length)]);
+       Shape shape = ShapeFactory.createShape("I");
+        shape.setY(-2);
+        shape.setX(cols/2);
         addTetrisShapeObject(shape);
 
     }

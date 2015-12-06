@@ -8,6 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 
 public class MainActivity extends FragmentActivity {
 
+
+    public interface OnBackPressedListener {
+        void onBackPressed();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

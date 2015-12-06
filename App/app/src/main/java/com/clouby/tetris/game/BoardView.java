@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.clouby.tetris.R;
+import com.clouby.tetris.Sounds;
 
 
 public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
@@ -23,18 +24,18 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
 
     public BoardView(Context context) {
         super(context);
-        init();
+        init(context);
 
     }
 
 
     public BoardView(Context context, AttributeSet attr) {
         super(context, attr);
-       init();
+       init(context);
 
     }
 
-    private void init(){
+    private void init(Context context){
         //add the callback to the surfaceHolder to intercept events
         getHolder().addCallback(this);
   //make gamePanel focusable so it can handle events
@@ -44,6 +45,9 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
         backgroundImageID= R.drawable.galaxy_6;
         imageOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(), backgroundImageID, imageOptions);
+
+        bg = new Background(BitmapFactory.decodeResource(getResources(), backgroundImageID));
+        boardPanel = new BoardPanel(20, 10, Sounds.GetInstance(context));
     }
 
     @Override
@@ -57,8 +61,6 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
-        bg = new Background(BitmapFactory.decodeResource(getResources(), backgroundImageID));
-        boardPanel = new BoardPanel(20, 10);
     }
 
     @Override
@@ -97,7 +99,8 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
 
     public boolean didLose(){ return  false;}
 
-    public void moveDown(){boardPanel.moveDown();}
+    public void hardDrop(){boardPanel.hardDrop();}
+    public void softDrop(){boardPanel.softDrop();}
     public void moveLeft(){boardPanel.moveLeft();}
     public void moveRight(){boardPanel.moveRight();}
     public void rotateNext(){boardPanel.turnToNext();}

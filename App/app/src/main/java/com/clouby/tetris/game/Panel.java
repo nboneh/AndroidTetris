@@ -45,7 +45,7 @@ public class Panel {
             for (int j = x; j < (x+ Shape.BOXES_COLS); j++) {
                 TetrisBox box = getBox(i,j);
                 boolean isPartOfShape = ((style & key) != 0);
-                if(isPartOfShape)
+                if(box != null && isPartOfShape)
                      box.setActive(shape.getColor());
                 key >>= 1;
             }
