@@ -59,7 +59,7 @@
         android:layout_alignStart="@+id/pause_button"
         android:text="Down" />
 
-    <com.clouby.tetris.game.GameView
+    <com.clouby.tetris.game.BoardView
         android:id="@+id/game_surfaceView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

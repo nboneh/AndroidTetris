@@ -1,31 +1,26 @@
 package com.clouby.tetris.game;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Message;
-import android.util.Log;
+import android.os.Handler;
 import android.view.SurfaceHolder;
 
-import com.clouby.tetris.GameFragment;
-import com.clouby.tetris.R;
-
-import android.os.Handler;
-
 public class GameThread extends Thread {
-    public static Canvas canvas;
-    public int FPS = 30;
-    public double averageFPS;
-    private SurfaceHolder surfaceHolder;
-    private GameView gameView;
-    private boolean running;
+    private SurfaceHolder boardSurfaceHolder;
+    private BoardView board;
+    private volatile boolean running;
+    private volatile boolean kill;
+    private long prevTime;
 
     private Handler gameOverHandler;
 
-    public GameThread(SurfaceHolder surfaceHolder, GameView gameView){
+    public GameThread( BoardView boardView){
         super();
-        this.surfaceHolder= surfaceHolder;
-        this.gameView = gameView;
+        this.boardSurfaceHolder= boardView.getHolder();
+        this.board = boardView;
+
+        prevTime = System.currentTimeMillis();
+        kill = false;
+        running = true;
 
     }
 
@@ -35,73 +30,50 @@ public class GameThread extends Thread {
 
     @Override
     public void run(){
-        long startTime;
-        long timeMillis;
-        long waitTime;
-        long totalTime = 0;
-        int frameCount = 0;
-        //1000 frames
-        long targetTime= 1000/FPS;
-        //20000 frames
-//        long targetTime= 20000/FPS;
+        while(!kill) {
+            while (running) {
+                long t = System.currentTimeMillis() - prevTime;
+                Canvas canvas = null;
 
-        while (running) {
-            startTime = System.nanoTime();
-            canvas = null;
-
-            //try locking the canvas for pixel editing
-            try {
-                canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder) {
-                    //running
-                    if(running){
-                        boolean lose = !this.gameView.update();
-                        if(lose){
+                //try locking the canvas for pixel editing
+                try {
+                    canvas = this.boardSurfaceHolder.lockCanvas();
+                    synchronized (boardSurfaceHolder) {
+                        this.board.update(t);
+                        prevTime = System.currentTimeMillis();
+                        /*if(lose){
                             Message msg = new Message();
-                            msg.arg1 = gameView.getScore();
+                            msg.arg1 = board.getScore();
                             gameOverHandler.sendMessage(msg);
                             return;
+                        }*/
+                        this.board.draw(canvas);
+                    }
+                } catch (Exception e) {
+                } finally {
+                    if (canvas != null) {
+                        try {
+                            boardSurfaceHolder.unlockCanvasAndPost(canvas);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        this.gameView.draw(canvas);
-                    }
-
-                }
-            } catch (Exception e) {
-            }
-
-            finally {
-                if(canvas != null){
-                    try{
-                        surfaceHolder.unlockCanvasAndPost(canvas);
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
                     }
                 }
-            }
 
-            timeMillis = (System.nanoTime() - startTime) / 1000000;
-            waitTime= targetTime- timeMillis;
 
-            try{
-                this.sleep(waitTime);
-            }catch (Exception e){}
-
-            totalTime += System.nanoTime()-startTime;
-            frameCount++;
-            if(frameCount == FPS ){
-                this.averageFPS = 1000/((totalTime/frameCount)/1000000);
-                frameCount =0;
-                totalTime =0;
-                System.out.println(averageFPS);
             }
         }
+        return;
 
     }
 
 
     public void setRunning(boolean b){
         running = b;
+    }
+
+    public void kill(){
+        kill = true;
     }
 
 }

@@ -1,23 +1,22 @@
 package com.clouby.tetris;
 
-import android.content.DialogInterface;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.app.AlertDialog;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.clouby.tetris.game.GameView;
+import com.clouby.tetris.game.BoardView;
+import com.clouby.tetris.game.GameThread;
 
 import java.util.HashMap;
 
@@ -26,7 +25,9 @@ import java.util.HashMap;
  */
 public class GameFragment extends Fragment implements View.OnClickListener {
 
-    private GameView gameView;
+    private GameThread gameThread;
+    private BoardView boardView;
+
 
 
     @Override
@@ -58,19 +59,22 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         (v.findViewById(R.id.down_button)).setOnClickListener(this);
         //transform
         (v.findViewById(R.id.transform_button)).setOnClickListener(this);
+        boardView = ((BoardView) v.findViewById(R.id.game_surfaceView));
 
-        gameView = (GameView) v.findViewById(R.id.game_surfaceView);
+        gameThread = new GameThread((BoardView) v.findViewById(R.id.game_surfaceView));
 
-        gameView.setGameOverHanlder(new Handler(getActivity().getMainLooper()) {
-                                        public void handleMessage(Message msg) {
-                                            //Checks if fragment is still attached
-                                            if (isAdded()) {
-                                                gameOver(msg.arg1);
-                                            }
+        gameThread.setGameOverHandler(new Handler(getActivity().getMainLooper()) {
+                                          public void handleMessage(Message msg) {
+                                              //Checks if fragment is still attached
+                                              if (isAdded()) {
+                                                  gameOver(msg.arg1);
+                                              }
 
-                                        }
-                                    }
+                                          }
+                                      }
         );
+
+        gameThread.start();
 
         return v;
     }
@@ -80,24 +84,21 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         Context context =getActivity();
         switch(v.getId()){
             case R.id.pause_button:
-                //TODO change later
                 pause();
-                pauseAlertDialog();
                 break;
             case R.id.left_button:
                 playSound(3, 1);
-                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveLeft();
+                boardView.moveLeft();
                 break;
             case R.id.right_button:
-                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveRight();
+                boardView.moveRight();
                 playSound(3, 1);
                 break;
             case R.id.down_button:
-                ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveDown();
+                boardView.moveDown();
                 break;
             case R.id.transform_button:
-                ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
-                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
+                boardView.rotateNext();
 
                 playSound(3, 1);
                 break;
@@ -123,29 +124,35 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         fragmentTransaction.commit();
     }
 
-    public void pauseAlertDialog() {
+
+    private void pause() {
         playSound(3, 1);
         musicPlayer.stop();
+        gameThread.setRunning(false);
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("Alert message to be shown");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setTitle("Pause");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Resume",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        gameThread.setRunning(true);
                         dialog.dismiss();
                     }
                 });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Main Menu", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().getSupportFragmentManager().popBackStack();
+                dialog.dismiss();
+            }
+        });
         alertDialog.show();
-    }
 
-    private void pause() {
-        gameView.pauseGame();
     }
 
     @Override
     public void onPause() {
-        gameView.resumeGame();
+        super.onPause();
+        pause();
     }
 
 

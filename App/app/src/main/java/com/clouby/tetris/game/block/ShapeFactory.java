@@ -1,18 +1,7 @@
-package com.clouby.tetris.game.block.Shape;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.clouby.tetris.game.block;
 
 public class ShapeFactory {
-    public Shape createShape(String type) {
-        Map<String, Shape> shapes = new HashMap();
-        if(!shapes.containsKey(type)){
-            shapes.put(type, createNewShape(type));
-        }
-        return shapes.get(type);
-    }
-
-    private Shape createNewShape(String type){
+    public static Shape createShape(String type) {
         Shape shape = null;
 
         if (type.equals("I")) {
@@ -33,4 +22,5 @@ public class ShapeFactory {
 
         return shape;
     }
+
 }

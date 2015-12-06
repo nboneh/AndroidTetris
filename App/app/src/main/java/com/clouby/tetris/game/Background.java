@@ -11,10 +11,6 @@ public class Background {
         image = res;
     }
 
-    public void update() {
-
-    }
-
     public void draw(Canvas canvas) {
         canvas.drawBitmap(image, x, y, null);
     }

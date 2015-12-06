@@ -1,8 +1,6 @@
-package com.clouby.tetris.game.block.Shape;
+package com.clouby.tetris.game.block;
 
 import android.graphics.Color;
-
-import com.clouby.tetris.R;
 
 //"L" Shape
 public class LShape extends Shape {

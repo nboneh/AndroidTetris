@@ -1,0 +1,105 @@
+package com.clouby.tetris.game;
+
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+import com.clouby.tetris.R;
+
+
+public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
+    //background image
+    public int backgroundImageID;
+    public final BitmapFactory.Options imageOptions = new BitmapFactory.Options();
+
+    private Background bg;
+    private BoardPanel boardPanel;
+
+    private static BoardView instance;
+
+    public BoardView(Context context) {
+        super(context);
+        init();
+
+    }
+
+
+    public BoardView(Context context, AttributeSet attr) {
+        super(context, attr);
+       init();
+
+    }
+
+    private void init(){
+        //add the callback to the surfaceHolder to intercept events
+        getHolder().addCallback(this);
+  //make gamePanel focusable so it can handle events
+        setFocusable(true);
+
+        //set image info
+        backgroundImageID= R.drawable.galaxy_6;
+        imageOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(getResources(), backgroundImageID, imageOptions);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder){
+        bg = new Background(BitmapFactory.decodeResource(getResources(), backgroundImageID));
+        boardPanel = new BoardPanel(20, 10);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        return super.onTouchEvent(event);
+    }
+
+    //return false if game over
+    public void update(long t){
+        boardPanel.update(t);
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        if (canvas != null) {
+            final float scaleFactorX = ((float) getWidth()) / imageOptions.outWidth;
+            final float scaleFactorY = ((float) getHeight()) / imageOptions.outHeight;
+
+            //savedCanvas
+            final int savedState = canvas.save();
+            canvas.scale(scaleFactorX, scaleFactorY);
+
+            //not sure whether need to call super.draw()
+            super.draw(canvas);
+            bg.draw(canvas);
+            //return to the saved state, prevent it from keeping scaling
+            canvas.restoreToCount(savedState);
+
+            boardPanel.draw(canvas);
+
+        }
+
+    }
+
+    public int getScore(){return boardPanel.getScore();}
+
+    public boolean didLose(){ return  false;}
+
+    public void moveDown(){boardPanel.moveDown();}
+    public void moveLeft(){boardPanel.moveLeft();}
+    public void moveRight(){boardPanel.moveRight();}
+    public void rotateNext(){boardPanel.turnToNext();}
+
+}

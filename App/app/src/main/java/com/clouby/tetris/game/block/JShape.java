@@ -1,4 +1,4 @@
-package com.clouby.tetris.game.block.Shape;
+package com.clouby.tetris.game.block;
 
 import android.graphics.Color;
 
