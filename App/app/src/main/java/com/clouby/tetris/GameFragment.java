@@ -1,6 +1,11 @@
 package com.clouby.tetris;
 
+<<<<<<< HEAD
 import android.app.AlertDialog;
+=======
+import android.app.Activity;
+import android.content.DialogInterface;
+>>>>>>> 64225fffc45b01ddbc328546af7bc40e87b61333
 import android.content.Context;
 import android.content.DialogInterface;
 import android.media.AudioManager;
@@ -25,30 +30,28 @@ import java.util.HashMap;
  */
 public class GameFragment extends Fragment implements View.OnClickListener {
 
+<<<<<<< HEAD
     private GameThread gameThread;
     private BoardView boardView;
 
 
+=======
+    private GameView gameView;
+    private Sounds sounds ;
+>>>>>>> 64225fffc45b01ddbc328546af7bc40e87b61333
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sounds = Sounds.GetInstance(getActivity());
     }
-
-
-    SoundPool sp;
-    HashMap<Integer,Integer> spMap;
-    private MediaPlayer musicPlayer;
-   // Sounds sounds;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        initSoundPool();
-        loadMusic();
-
         View v = inflater.inflate(R.layout.fragment_game, container, false);
+        sounds.playMusic();
         //pause button
         (v.findViewById(R.id.pause_button)).setOnClickListener(this);
         //left button
@@ -81,26 +84,40 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public  void onClick(View v){
-        Context context =getActivity();
         switch(v.getId()){
             case R.id.pause_button:
                 pause();
                 break;
             case R.id.left_button:
+<<<<<<< HEAD
                 playSound(3, 1);
                 boardView.moveLeft();
                 break;
             case R.id.right_button:
                 boardView.moveRight();
                 playSound(3, 1);
+=======
+                sounds.playSound(3);
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveLeft();
+                break;
+            case R.id.right_button:
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().moveRight();
+             sounds.playSound( 3);
+>>>>>>> 64225fffc45b01ddbc328546af7bc40e87b61333
                 break;
             case R.id.down_button:
                 boardView.moveDown();
                 break;
             case R.id.transform_button:
+<<<<<<< HEAD
                 boardView.rotateNext();
 
                 playSound(3, 1);
+=======
+                ((GameView) (getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
+                ((GameView)(getActivity().findViewById(R.id.game_surfaceView))).getGamePanel().turnNext();
+              sounds.playSound(3);
+>>>>>>> 64225fffc45b01ddbc328546af7bc40e87b61333
                 break;
 
         }
@@ -124,11 +141,18 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         fragmentTransaction.commit();
     }
 
+<<<<<<< HEAD
 
     private void pause() {
         playSound(3, 1);
         musicPlayer.stop();
         gameThread.setRunning(false);
+=======
+    public void pauseAlertDialog() {
+        Context context = getActivity();
+        sounds.playSound(3);
+        sounds.stopMusic();
+>>>>>>> 64225fffc45b01ddbc328546af7bc40e87b61333
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle("Pause");
@@ -155,46 +179,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         pause();
     }
 
-
-    public void initSoundPool(){
-        sp=new SoundPool(
-                5,
-                AudioManager.STREAM_MUSIC,
-                0
-        );
-        spMap=new HashMap<Integer,Integer>();
-        Context context =getActivity();
-        spMap.put(1, sp.load(context, R.raw.drop_free, 1));
-        spMap.put(2, sp.load(context, R.raw.tetris_free, 1));
-        spMap.put(3, sp.load(context, R.raw.key_free, 1));
-
-    }
-    public void playSound(int sound,int number){
-        Context context =getActivity();
-        AudioManager am=(AudioManager)context.getSystemService(context.AUDIO_SERVICE);
-        float audioMaxVolume=am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float audioCurrentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float volumeRatio=audioCurrentVolume/audioMaxVolume;
-
-        sp.play(
-                spMap.get(sound),
-                volumeRatio,
-                volumeRatio,
-                1,
-                number,
-                1
-        );
-    }
-    public void loadMusic(){
-        Context context = getActivity();
-        AudioManager audioManager=(AudioManager)context.getSystemService(context.AUDIO_SERVICE);
-
-        musicPlayer = MediaPlayer.create(context, R.raw.music);
-        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        musicPlayer.setLooping(true);
-
-        musicPlayer.start();
-    }
 
 
 }
