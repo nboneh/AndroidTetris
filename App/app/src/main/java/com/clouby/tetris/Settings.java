@@ -58,7 +58,7 @@ public class Settings {
         this.musicVolume = musicVolume;
     }
 
-    public float getSoundVolume() {
+   public float getSoundVolume() {
         return soundVolume;
     }
 

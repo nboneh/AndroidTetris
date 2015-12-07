@@ -1,7 +1,6 @@
 package com.clouby.tetris.game;
 
 import android.graphics.Canvas;
-import android.os.Handler;
 import android.view.SurfaceHolder;
 
 public class GameThread extends Thread {
@@ -11,28 +10,26 @@ public class GameThread extends Thread {
     private volatile boolean kill;
     private long prevTime;
 
-    private Handler gameOverHandler;
 
     public GameThread( BoardView boardView){
         super();
         this.boardSurfaceHolder= boardView.getHolder();
         this.board = boardView;
 
-        prevTime = System.currentTimeMillis();
+        prevTime = 0;
         kill = false;
         running = true;
 
     }
 
-    public void setGameOverHandler(Handler gameOverHandler){
-        this.gameOverHandler = gameOverHandler;
-    }
 
     @Override
     public void run(){
         while(!kill) {
             while (running) {
                 long t = System.currentTimeMillis() - prevTime;
+                if(prevTime == 0)
+                    t = prevTime;
                 Canvas canvas = null;
 
                 //try locking the canvas for pixel editing
@@ -41,12 +38,6 @@ public class GameThread extends Thread {
                     synchronized (boardSurfaceHolder) {
                         this.board.update(t);
                         prevTime = System.currentTimeMillis();
-                        /*if(lose){
-                            Message msg = new Message();
-                            msg.arg1 = board.getScore();
-                            gameOverHandler.sendMessage(msg);
-                            return;
-                        }*/
                         this.board.draw(canvas);
                     }
                 } catch (Exception e) {
@@ -62,6 +53,7 @@ public class GameThread extends Thread {
 
 
             }
+            prevTime = 0;
         }
         return;
 

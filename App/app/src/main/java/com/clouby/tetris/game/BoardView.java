@@ -11,6 +11,9 @@ import android.view.SurfaceView;
 import com.clouby.tetris.R;
 import com.clouby.tetris.Sounds;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
     //background image
@@ -20,12 +23,22 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
     private Background bg;
     private BoardPanel boardPanel;
 
+    List<BoardPanelListener> listeners;
+
     private static BoardView instance;
 
     public BoardView(Context context) {
         super(context);
         init(context);
 
+    }
+
+    public void addListener(BoardPanelListener listener){
+        if(listeners == null) {
+            listeners = new ArrayList<>();
+            boardPanel.setListeners(listeners);
+        }
+        listeners.add(listener);
     }
 
 

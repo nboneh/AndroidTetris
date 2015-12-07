@@ -11,14 +11,15 @@ import java.util.HashMap;
 /**
  * Created by Raymond on 2015/12/4.
  */
-public  class Sounds {
+public class Sounds {
     private SoundPool sp;
     private HashMap<Integer, Integer> spMap;
-    public  MediaPlayer musicPlayer;
+    public MediaPlayer musicPlayer;
     static Settings settings;
     AudioManager audioManager;
-    private static Sounds instance = null;
     private Context context;
+    private static Sounds instance = null;
+    boolean musicStopped;
 
     public static final int PLAY_END = 0;
     public static final int GAME_OVER = 1;
@@ -26,55 +27,57 @@ public  class Sounds {
     public static final int TETRIS = 3;
 
     private Sounds(Context c) {
-        context =c;
-        settings = Settings.getInstance(context);
-        musicPlayer = MediaPlayer.create(context, R.raw.music);
-        audioManager=(AudioManager)c.getSystemService(c.AUDIO_SERVICE);
+        settings = Settings.getInstance(c);
+        this.context = c;
+        musicStopped = true;
+        audioManager = (AudioManager) c.getSystemService(c.AUDIO_SERVICE);
+        initSoundPool(c);
     }
 
-    public static Sounds GetInstance(Context context)
-    {
+    public static Sounds GetInstance(Context context) {
         if (instance == null) {
             instance = new Sounds(context);
         }
         return instance;
 
     }
-    public void pauseMusic(){
+
+    public void pauseMusic() {
         musicPlayer.pause();
     }
-    public void playMusic(){
-        musicPlayer.setVolume(settings.getMusicVolume()/10, settings.getMusicVolume()/10);
-        initSoundPool();
-        loadMusic();
+
+    public void playMusic() {
+        if (musicStopped) {
+            musicPlayer = MediaPlayer.create(context, R.raw.music);
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (settings.getMusicVolume() * 50), 0);
+            musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            musicPlayer.setLooping(true);
+            musicPlayer.setVolume(settings.getMusicVolume()/5, settings.getMusicVolume()/5 );
+        }
         musicPlayer.start();
+        musicStopped = false;
     }
-    public void stopMusic(){
+
+    public void stopMusic() {
         musicPlayer.stop();
-    }
-    public void loadMusic(){
-        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        musicPlayer.setLooping(true);
+        musicStopped = true;
     }
 
-    public void playSound(int Id) {
-        AudioManager am = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
-        //am.setStreamVolume(AudioManager.STREAM_MUSIC, (int) settings.getSoundVolume(), 60);
-        float audioMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    synchronized  public void playSound(int Id) {
+        float settingsVolume = settings.getSoundVolume();
 
-         float volumeRatio= settings.getSoundVolume();
         sp.play(
                 spMap.get(Id),
-                volumeRatio,
-                volumeRatio,
+                settingsVolume,
+                settingsVolume,
                 1,
-                1,
+                0,
                 1
         );
     }
 
 
-    private void initSoundPool() {
+    private void initSoundPool(Context context) {
         sp = new SoundPool(
                 5,
                 AudioManager.STREAM_MUSIC,

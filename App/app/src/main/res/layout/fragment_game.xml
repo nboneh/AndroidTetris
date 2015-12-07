@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/transform_button"
         android:layout_marginEnd="37dp"
-        android:layout_marginRight="37dp"
+        android:layout_marginRight="30dp"
         android:layout_toLeftOf="@+id/transform_button"
         android:layout_toStartOf="@+id/transform_button"
         android:text="Right" />
@@ -45,29 +45,49 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_toLeftOf="@+id/down_button"
-        android:layout_toStartOf="@+id/down_button"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/hard_drop_button"
+        android:layout_toStartOf="@+id/hard_drop_button"
         android:text="Trans" />
 
     <Button
-        android:id="@+id/down_button"
+        android:id="@+id/hard_drop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/soft_drop_button"
+        android:layout_toStartOf="@+id/soft_drop_button"
+        android:text="Hard\nDrop" />
+
+
+    <Button
+        android:id="@+id/soft_drop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/pause_button"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/pause_button"
-        android:text="Down" />
+        android:text="Soft\nDrop" />
 
     <com.clouby.tetris.game.BoardView
         android:id="@+id/game_surfaceView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/left_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/pause_button"
         android:layout_toLeftOf="@+id/pause_button"
-        android:layout_toStartOf="@+id/pause_button" />
+        android:layout_toRightOf="@+id/left_button"
+        android:layout_toEndOf="@+id/left_button" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/score_text"
+        android:layout_toStartOf="@+id/game_surfaceView"
+        android:layout_toLeftOf="@+id/game_surfaceView" />
 
 </RelativeLayout>
