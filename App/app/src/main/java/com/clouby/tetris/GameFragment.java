@@ -184,7 +184,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, View
             @Override
             public void run() {   //Popping up to main menu screen to
                 scoreText.setText("Score:\n" +boardPanel.getScore());
-                levelText.setText( "Level:" + boardPanel.getLevel() + "\nGoal: " + boardPanel.lineTillNextLevel());
+                levelText.setText( "Level:\n" + boardPanel.getLevel() + "\nGoal: " + boardPanel.lineTillNextLevel());
             }
         };
         mainHandler.post(myRunnable);

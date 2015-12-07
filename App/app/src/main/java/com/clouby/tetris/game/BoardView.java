@@ -60,7 +60,7 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
         backgroundImageID= R.drawable.galaxy_6;
         if(Settings.getInstance(context).getTheme() == Settings.DARK_THEME)
             backgroundImageID= R.drawable.galaxy_2;
-        
+
         imageOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(), backgroundImageID, imageOptions);
 
