@@ -32,7 +32,7 @@
                         android:text="Hold"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.2"
+                        android:layout_weight="0.15"
                         ></com.clouby.tetris.game.HoldPieceView>
 
 
@@ -51,7 +51,7 @@
                         android:textSize="15sp"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.4"
+                        android:layout_weight="0.45"
                         android:editable="false"
                         ></EditText>
                     <Button
@@ -147,7 +147,7 @@
             <Button
                 android:id="@+id/transform_button"
                 android:textAllCaps="false"
-                android:text="Trans"
+                android:text="Rotate"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.33">

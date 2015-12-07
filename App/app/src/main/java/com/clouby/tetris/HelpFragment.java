@@ -23,9 +23,9 @@ public class HelpFragment extends Fragment {
     private ViewPager viewPager;
 
     private int[] images = {
-            R.drawable.bulbasaur,
-            R.drawable.charmander,
-            R.drawable.squirtle
+            R.drawable.help1,
+            R.drawable.help2,
+            R.drawable.help3
     };
 
     private ImageSwitcher imgSwitcher;
