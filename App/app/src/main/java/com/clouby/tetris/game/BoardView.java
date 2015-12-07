@@ -9,7 +9,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.clouby.tetris.R;
+import com.clouby.tetris.Settings;
 import com.clouby.tetris.Sounds;
+import com.clouby.tetris.game.block.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
     private Background bg;
     private BoardPanel boardPanel;
 
-    List<BoardPanelListener> listeners;
+    List<BoardViewListener> listeners;
 
     private static BoardView instance;
 
@@ -33,7 +35,7 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
 
     }
 
-    public void addListener(BoardPanelListener listener){
+    public void addListener(BoardViewListener listener){
         if(listeners == null) {
             listeners = new ArrayList<>();
             boardPanel.setListeners(listeners);
@@ -56,6 +58,9 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
 
         //set image info
         backgroundImageID= R.drawable.galaxy_6;
+        if(Settings.getInstance(context).getTheme() == Settings.DARK_THEME)
+            backgroundImageID= R.drawable.galaxy_2;
+        
         imageOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(), backgroundImageID, imageOptions);
 
@@ -102,7 +107,7 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
             //return to the saved state, prevent it from keeping scaling
             canvas.restoreToCount(savedState);
 
-            boardPanel.draw(canvas);
+            boardPanel.draw(canvas, false);
 
         }
 
@@ -117,5 +122,9 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback{
     public void moveLeft(){boardPanel.moveLeft();}
     public void moveRight(){boardPanel.moveRight();}
     public void rotateNext(){boardPanel.turnToNext();}
+
+    public void setActiveShape(Shape s){boardPanel.makeActiveShape(s);}
+
+    public Shape getActiveShape(){ return  boardPanel.getActiveShape();}
 
 }

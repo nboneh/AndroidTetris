@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.clouby.tetris.Sounds;
 import com.clouby.tetris.game.block.Shape;
-import com.clouby.tetris.game.block.ShapeFactory;
 import com.clouby.tetris.game.block.TetrisBox;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class BoardPanel extends Panel {
     Random rand;
     int level = 1;
 
-    private List<BoardPanelListener> listeners = null;
+    private List<BoardViewListener> listeners = null;
     private List<Integer> linesToClear;
 
     private  Sounds sounds;
@@ -70,17 +69,25 @@ public class BoardPanel extends Panel {
         return  linesTillNextLevel;
     }
 
-    public void setListeners( List<BoardPanelListener> listeners){
+    public void setListeners( List<BoardViewListener> listeners){
         this.listeners = listeners;
     }
 
+    public Shape getActiveShape(){
+        return activeShape;
+    }
+
     public void makeActiveShape(Shape shape){
+        eraseActiveShape();
+        this.activeShape = shape;
+        if(shape == null)
+            return;
+
         shape.setY(-1);
         shape.setX(cols / 2 - 2);
-        this.activeShape = shape;
         if(!isMovable()){
             if(listeners != null) {
-                for (BoardPanelListener listener:listeners) {
+                for (BoardViewListener listener:listeners) {
                     listener.gameOver(score);
                 }
             }
@@ -200,6 +207,8 @@ public class BoardPanel extends Panel {
     public void hardDrop(){
         while(moveDown())
             score+=2;
+        pieceMoveDownCounter = timeTillPieceMoveDown;
+
     }
 
 
@@ -301,10 +310,9 @@ public class BoardPanel extends Panel {
             lineClearCounter += timeInMilliseconds;
         } else {
             if(activeShape == null) {
-                generateNewPiece();
 
                if(listeners != null) {
-                    for (BoardPanelListener listener:listeners) {
+                    for (BoardViewListener listener:listeners) {
                         listener.playEnd(this);
                     }
                 }
@@ -325,11 +333,5 @@ public class BoardPanel extends Panel {
 
     }
 
-
-    private void generateNewPiece(){
-       Shape shape = ShapeFactory.createShape("I");
-        makeActiveShape(shape);
-
-    }
 
 }

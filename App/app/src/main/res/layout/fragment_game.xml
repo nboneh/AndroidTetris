@@ -1,93 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
     android:background="@drawable/galaxy_1"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:id="@+id/layoutContainer" android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.86"
+        android:orientation="horizontal">
+
+        <!-- This is the part that's 70% of the total width. I'm inserting a LinearLayout and buttons.-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.20">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <com.clouby.tetris.game.HoldPieceView
+                        android:id="@+id/hold_view"
+                        android:textAllCaps="false"
+                        android:text="Hold"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.2"
+                        ></com.clouby.tetris.game.HoldPieceView>
 
 
-    <Button
-        android:id="@+id/pause_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="right"
-        android:text="Pause" />
-
-    <Button
-        android:id="@+id/left_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="Left" />
-
-    <Button
-        android:id="@+id/right_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/transform_button"
-        android:layout_marginEnd="37dp"
-        android:layout_marginRight="30dp"
-        android:layout_toLeftOf="@+id/transform_button"
-        android:layout_toStartOf="@+id/transform_button"
-        android:text="Right" />
-
-    <Button
-        android:id="@+id/transform_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="33dp"
-        android:layout_marginRight="30dp"
-        android:layout_toLeftOf="@+id/hard_drop_button"
-        android:layout_toStartOf="@+id/hard_drop_button"
-        android:text="Trans" />
-
-    <Button
-        android:id="@+id/hard_drop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="33dp"
-        android:layout_marginRight="30dp"
-        android:layout_toLeftOf="@+id/soft_drop_button"
-        android:layout_toStartOf="@+id/soft_drop_button"
-        android:text="Hard\nDrop" />
+                    <Button
+                        android:id="@+id/pause_button"
+                        android:textAllCaps="false"
+                        android:text="Pause"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.2"
+                        ></Button>
+                    <EditText
+                        android:id="@+id/level_view"
+                        android:textAllCaps="false"
+                        android:text="Level"
+                        android:textSize="15sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:editable="false"
+                        ></EditText>
+                    <Button
+                        android:id="@+id/soft_drop_button"
+                        android:textAllCaps="false"
+                        android:text="Soft Drop"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.2"
+                        ></Button>
 
 
-    <Button
-        android:id="@+id/soft_drop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/pause_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/pause_button"
-        android:text="Soft\nDrop" />
+                </LinearLayout>
 
-    <com.clouby.tetris.game.BoardView
-        android:id="@+id/game_surfaceView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/left_button"
-        android:layout_alignTop="@+id/pause_button"
-        android:layout_toLeftOf="@+id/pause_button"
-        android:layout_toRightOf="@+id/left_button"
-        android:layout_toEndOf="@+id/left_button" />
+            </RelativeLayout>
+            <com.clouby.tetris.game.BoardView
+                android:id="@+id/game_surfaceView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.60">
+            </com.clouby.tetris.game.BoardView>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.20">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/score_text"
-        android:layout_toStartOf="@+id/game_surfaceView"
-        android:layout_toLeftOf="@+id/game_surfaceView" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
 
-</RelativeLayout>
+                    <com.clouby.tetris.game.UpcomingPieceView
+                        android:id="@+id/upcomingPiece_view"
+                        android:textAllCaps="false"
+                        android:text="Upcoming Piece"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
+                        ></com.clouby.tetris.game.UpcomingPieceView>
+                    <EditText
+                        android:id="@+id/score_view"
+                        android:textAllCaps="false"
+                        android:text="Score"
+                        android:textSize="15sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.2"
+                        android:editable="false"
+                        ></EditText>
+                    <Button
+                        android:id="@+id/hard_drop_button"
+                        android:textAllCaps="false"
+                        android:text="Hard Drop"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.2"
+                        ></Button>
+
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+        <!-- 80% Width End-->
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.20">
+
+        <!-- This is the part that's 70% of the total width. I'm inserting a LinearLayout and buttons.-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/left_button"
+                android:textAllCaps="false"
+                android:text="Left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33">
+            </Button>
+            <Button
+                android:id="@+id/transform_button"
+                android:textAllCaps="false"
+                android:text="Trans"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33">
+            </Button>
+            <Button
+                android:id="@+id/right_button"
+                android:textAllCaps="false"
+                android:text="Right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33">
+            </Button>
+
+        </LinearLayout>
+        <!-- 80% Width End-->
+
+    </RelativeLayout>
+</LinearLayout>

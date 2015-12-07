@@ -1,6 +1,6 @@
 package com.clouby.tetris.game.block;
 
-public class Shape {
+public class Shape implements Cloneable {
     /*
      * each shape occupies 4 rows and 4 columns
      */
@@ -23,21 +23,11 @@ public class Shape {
         rotation =0;
     }
 
-    public int getRotation() {
-        return rotation;
-    }
 
     public int getStyle(){
         return s[rotation];
     }
 
-    public int[] getS() {
-        return s;
-    }
-
-    public void setS(int[] s) {
-        this.s = s;
-    }
 
     public int getX() {
         return x;
@@ -80,22 +70,18 @@ public class Shape {
         return s[rotation];
     }
 
-    public void moveLeft() {
-        x--;
-    }
-
-    public void moveRight() {
-        x++;
-    }
-
-    public void moveDown() {
-        y++;
-    }
 
     public void setRotation(int rotation) {
         this.rotation = rotation;
     }
 
+    @Override
+    public Shape clone() throws CloneNotSupportedException {
 
+        Shape clone = new Shape(s);
+        clone.setColor(getColor());
+
+        return clone;
+    }
 
 }

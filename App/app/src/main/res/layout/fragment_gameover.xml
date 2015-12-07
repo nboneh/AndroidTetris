@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/gameover_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -48,8 +48,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/new_game_button"
+        android:layout_below="@+id/gameover_title"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="90dp"
+
+        android:gravity="center"
         android:text="Your Score: "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

@@ -3,18 +3,19 @@ package com.clouby.tetris.game.block;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class TetrisBox  {
-    Paint paint= new Paint();
+public class TetrisBox {
+    Paint paint = new Paint();
     private Dimension size = new Dimension();
     private boolean empty;
-    private final static int EMPTY_COLOR = Color.parseColor("#00000000");
+    private final static int EMPTY_COLOR = Color.parseColor("#007fff");
 
-   public static TetrisBox createEmptyTetrisBox(){
-       TetrisBox tetrisBox = new TetrisBox();
-       tetrisBox.setInActive();
-       return tetrisBox;
-   }
-    private TetrisBox(){
+    public static TetrisBox createEmptyTetrisBox() {
+        TetrisBox tetrisBox = new TetrisBox();
+        tetrisBox.setInActive();
+        return tetrisBox;
+    }
+
+    private TetrisBox() {
         paint.setStyle(Paint.Style.FILL);
     }
 
@@ -22,12 +23,13 @@ public class TetrisBox  {
         paint.setColor(color);
         empty = false;
     }
-    public void setInActive(){
+
+    public void setInActive() {
         paint.setColor(EMPTY_COLOR);
         empty = true;
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return !empty;
     }
 
@@ -35,7 +37,7 @@ public class TetrisBox  {
         return paint;
     }
 
-    public int getColor(){
+    public int getColor() {
         return paint.getColor();
     }
 

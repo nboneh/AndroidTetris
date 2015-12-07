@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,20 +14,27 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.clouby.tetris.game.BoardPanel;
-import com.clouby.tetris.game.BoardPanelListener;
 import com.clouby.tetris.game.BoardView;
+import com.clouby.tetris.game.BoardViewListener;
 import com.clouby.tetris.game.GameThread;
+import com.clouby.tetris.game.HoldPieceView;
+import com.clouby.tetris.game.UpcomingPieceView;
+import com.clouby.tetris.game.block.Shape;
 
 /**
  * Created by Shirong on 11/19/2015.
  */
-public class GameFragment extends Fragment implements View.OnClickListener, View.OnKeyListener, BoardPanelListener {
+public class GameFragment extends Fragment implements View.OnClickListener, View.OnKeyListener, BoardViewListener {
 
     private GameThread gameThread;
     private BoardView boardView;
+    private HoldPieceView holdPieceView;
+
     private Sounds sounds ;
     private  AlertDialog pauseDialog;
     private EditText scoreText;
+    private EditText levelText;
+    private UpcomingPieceView upcomingPieceView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +47,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, View
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_game, container, false);
-        sounds.playMusic();
+//        sounds.playMusic();
         //pause button
         (v.findViewById(R.id.pause_button)).setOnClickListener(this);
         //left button
@@ -52,18 +60,33 @@ public class GameFragment extends Fragment implements View.OnClickListener, View
         //transform
         (v.findViewById(R.id.transform_button)).setOnClickListener(this);
 
-        scoreText = (EditText)v.findViewById(R.id.score_text);
         boardView = ((BoardView) v.findViewById(R.id.game_surfaceView));
-        boardView.addListener(this);
 
-        gameThread = new GameThread(boardView);
+        scoreText = (EditText)v.findViewById(R.id.score_view);
+        levelText = (EditText)v.findViewById(R.id.level_view);
+        boardView = ((BoardView) v.findViewById(R.id.game_surfaceView));
+        upcomingPieceView = (UpcomingPieceView) v.findViewById(R.id.upcomingPiece_view);
+
+        boardView.addListener(this);
+        boardView.addListener(upcomingPieceView);
+
+        holdPieceView =  (HoldPieceView)v.findViewById(R.id.hold_view);
+        boardView.addListener(holdPieceView);
+        gameThread = new GameThread(boardView, upcomingPieceView, holdPieceView);
+
+        holdPieceView.setOnClickListener(this);
 
         gameThread.start();
+        sounds.playMusic();
 
         v.setFocusableInTouchMode(true);
         v.requestFocus();
 
         v.setOnKeyListener(this);
+
+        if(Settings.getInstance(getActivity()).getTheme() == Settings.DARK_THEME){
+            v.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.galaxy_3));
+        }
 
         return v;
     }
@@ -88,6 +111,16 @@ public class GameFragment extends Fragment implements View.OnClickListener, View
                 break;
             case R.id.transform_button:
                 boardView.rotateNext();
+                break;
+
+            case R.id.hold_view:
+                if(!holdPieceView.isAllowExchange())
+                    return;
+                Shape exchange = holdPieceView.exchange(boardView.getActiveShape());
+                if(exchange != null)
+                     boardView.setActiveShape(exchange);
+                else
+                    boardView.setActiveShape(upcomingPieceView.getNextPiece());
                 break;
 
         }
@@ -150,11 +183,8 @@ public class GameFragment extends Fragment implements View.OnClickListener, View
         Runnable myRunnable = new Runnable() {
             @Override
             public void run() {   //Popping up to main menu screen to
-                StringBuilder sb = new StringBuilder();
-                sb.append("Score:\n" +boardPanel.getScore());
-                sb.append("\n Level:" + boardPanel.getLevel());
-                sb.append("\n Goal: " + boardPanel.lineTillNextLevel());
-                scoreText.setText(sb.toString());
+                scoreText.setText("Score:\n" +boardPanel.getScore());
+                levelText.setText( "Level:" + boardPanel.getLevel() + "\nGoal: " + boardPanel.lineTillNextLevel());
             }
         };
         mainHandler.post(myRunnable);

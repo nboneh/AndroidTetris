@@ -49,7 +49,6 @@ public class Sounds {
     public void playMusic() {
         if (musicStopped) {
             musicPlayer = MediaPlayer.create(context, R.raw.music);
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (settings.getMusicVolume() * 50), 0);
             musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             musicPlayer.setLooping(true);
             musicPlayer.setVolume(settings.getMusicVolume()/5, settings.getMusicVolume()/5 );

@@ -1,6 +1,8 @@
 package com.clouby.tetris.game;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 
 import com.clouby.tetris.game.block.Shape;
 import com.clouby.tetris.game.block.TetrisBox;
@@ -35,6 +37,14 @@ public class Panel {
         }
     }
 
+    public void clear(){
+        for (int i = 0; i < boxes.length; i++) {
+            for (int j = 0; j < boxes[i].length; j++) {
+                getBox(i,j).setInActive();
+            }
+        }
+    }
+
 
     public void addTetrisShapeObject(Shape shape){
         int x = shape.getX();
@@ -61,10 +71,11 @@ public class Panel {
     }
 
 
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas, boolean clear){
+        if(clear)
+             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         float boxWidth = canvas.getWidth() / cols;
         float boxHeight = canvas.getHeight() / rows;
-
 
         for(int i=0; i<boxes.length; ++i){
             for(int j=0; j<boxes[i].length; ++j){
