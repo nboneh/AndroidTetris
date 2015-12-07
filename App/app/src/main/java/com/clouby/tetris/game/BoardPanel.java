@@ -265,10 +265,11 @@ public class BoardPanel extends Panel {
             if (linesTillNextLevel <= 0) {
                 linesTillNextLevel += LINE_CLEAR_TILL_NEXT_LEVEL;
                 level++;
-                if (level >= MAX_LEVEL)
-                    timeTillPieceMoveDown = 0;
-                else
+                if (level <= MAX_LEVEL)
                     timeTillPieceMoveDown = TIME_TILL_MOVE_DOWN_INITIAL / level;
+
+                if(level >= MAX_LEVEL)
+                    linesTillNextLevel = 0;
             }
         }
 
