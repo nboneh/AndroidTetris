@@ -32,7 +32,7 @@ public class HighScoresFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db =  DatabaseHandler.getInstance(getActivity());
+        db = DatabaseHandler.getInstance(getActivity());
     }
 
     @Override
@@ -42,40 +42,38 @@ public class HighScoresFragment extends Fragment implements View.OnClickListener
         ((Button) v.findViewById(R.id.delete_local_high_scores)).setOnClickListener(this);
 
         localHighScoresView = (LinearLayout) v.findViewById(R.id.local_high_scores);
-        printHighScores(localHighScoresView,db.getLocalHighScores());
+        printHighScores(localHighScoresView, db.getLocalHighScores());
 
         onlineHighScoresView = (LinearLayout) v.findViewById(R.id.online_high_scores);
-
 
 
         return v;
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //Incase user regained internet or online highscores updates while in background
         //Sending an observer to the database function since networking must happen outside the main thread
-        Handler onlineScoreHandler = new Handler(getActivity().getMainLooper()){
+        Handler onlineScoreHandler = new Handler(getActivity().getMainLooper()) {
             public void handleMessage(Message msg) {
                 //Checks if fragment is still attached
-                if(isAdded()) {
+                if (isAdded()) {
                     printHighScores(onlineHighScoresView, (List<HighScoreContainer>) msg.obj);
                 }
             }
         };
 
-        if(!db.getOnlineHighScores(onlineScoreHandler)){
+        if (!db.getOnlineHighScores(onlineScoreHandler)) {
             Toast.makeText(getActivity(), "Phone is not connected to the internet!", Toast.LENGTH_LONG).show();
         }
 
 
-
     }
 
-    private void printHighScores(LinearLayout highscoresview,List<HighScoreContainer> highscoreList){
+    private void printHighScores(LinearLayout highscoresview, List<HighScoreContainer> highscoreList) {
         highscoresview.removeAllViews();
-        for(int i = 0; i < highscoreList.size(); i++){
+        for (int i = 0; i < highscoreList.size(); i++) {
             HighScoreContainer container = highscoreList.get(i);
             RelativeLayout entryView = new RelativeLayout(getActivity());
 
@@ -88,26 +86,26 @@ public class HighScoresFragment extends Fragment implements View.OnClickListener
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, marginInDp , 0, 0);
+            lp.setMargins(0, marginInDp, 0, 0);
             entryView.setLayoutParams(lp);
 
-            TextView aliasView= new TextView(getActivity());
+            TextView aliasView = new TextView(getActivity());
             aliasView.setText((i + 1) + "." + container.getAlias());
             RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
-                     RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             aliasView.setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
             aliasView.setLayoutParams(rlp);
 
-            TextView scoreView= new TextView(getActivity());
+            TextView scoreView = new TextView(getActivity());
             scoreView.setText(container.getScore() + "");
             rlp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             scoreView.setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
-           scoreView.setLayoutParams(rlp);
+            scoreView.setLayoutParams(rlp);
 
             entryView.addView(aliasView);
             entryView.addView(scoreView);
@@ -126,7 +124,7 @@ public class HighScoresFragment extends Fragment implements View.OnClickListener
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 db.clearLocalHighScores();
-                                printHighScores(localHighScoresView,db.getLocalHighScores());
+                                printHighScores(localHighScoresView, db.getLocalHighScores());
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

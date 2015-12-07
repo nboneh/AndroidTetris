@@ -2,55 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
+        android:id="@+id/gameover_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Game Over"
-        android:id="@+id/textView2"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Game Over"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Game"
         android:id="@+id/new_game_button"
-        android:layout_marginBottom="170dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Main Menu"
-        android:id="@+id/main_menu_button"
-        android:layout_marginBottom="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Highscores"
-        android:id="@+id/highscores_button"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/main_menu_button"
+        android:text="New Game" />
 
+    <Button
+        android:id="@+id/main_menu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/highscores_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="Main Menu" />
+
+    <Button
+        android:id="@+id/highscores_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="Highscores" />
 
     <TextView
+        android:id="@+id/score_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Your Score: "
-        android:id="@+id/score_text"
-        android:layout_marginBottom="150dp"
         android:layout_above="@+id/new_game_button"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/gameover_title"
+        android:layout_centerHorizontal="true"
+
+        android:gravity="center"
+        android:text="Your Score: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </RelativeLayout>

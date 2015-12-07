@@ -17,15 +17,15 @@ import android.widget.RadioGroup;
 /**
  * Created by nboneh on 11/15/2015.
  */
-public class HelpFragment extends Fragment  {
+public class HelpFragment extends Fragment {
 
     private RadioGroup radioGroup;
     private ViewPager viewPager;
 
     private int[] images = {
-            R.drawable.bulbasaur,
-            R.drawable.charmander,
-            R.drawable.squirtle
+            R.drawable.help1,
+            R.drawable.help2,
+            R.drawable.help3
     };
 
     private ImageSwitcher imgSwitcher;
