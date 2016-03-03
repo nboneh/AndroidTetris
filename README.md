@@ -1,4 +1,3 @@
 # AndroidTetris
 
-ScreenShots <br />
-[embed](/AndroidTetris_Part4.pdf)[/embed]
+Check out this [pdf](/AndroidTetris_Part4.pdf) for more information  <br />
